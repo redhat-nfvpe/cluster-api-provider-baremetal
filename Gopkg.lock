@@ -96,6 +96,12 @@
   version = "v1.1.5"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/kubernetes/code-generator"
+  packages = ["cmd/deepcopy-gen"]
+  revision = "3a2206dd6a78497deceb3ae058417fdeb2036c7e"
+
+[[projects]]
   name = "github.com/modern-go/concurrent"
   packages = ["."]
   revision = "bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94"
@@ -194,6 +200,25 @@
   name = "golang.org/x/time"
   packages = ["rate"]
   revision = "85acf8d2951cb2a3bde7632f9ff273ef0379bcbd"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/tools"
+  packages = [
+    "go/ast/astutil",
+    "go/gcexportdata",
+    "go/internal/cgo",
+    "go/internal/gcimporter",
+    "go/internal/packagesdriver",
+    "go/packages",
+    "go/types/typeutil",
+    "imports",
+    "internal/fastwalk",
+    "internal/gopathwalk",
+    "internal/module",
+    "internal/semver"
+  ]
+  revision = "d66bd3c5d5a61998d3e35797d266491d11b5e487"
 
 [[projects]]
   name = "google.golang.org/appengine"
@@ -297,7 +322,6 @@
     "pkg/util/strategicpatch",
     "pkg/util/validation",
     "pkg/util/validation/field",
-    "pkg/util/wait",
     "pkg/util/yaml",
     "pkg/version",
     "pkg/watch",
@@ -368,6 +392,29 @@
   version = "v10.0.0"
 
 [[projects]]
+  branch = "release-1.10"
+  name = "k8s.io/code-generator"
+  packages = [
+    "cmd/deepcopy-gen/args",
+    "pkg/util"
+  ]
+  revision = "edc41f23fa918716df540b1486477d62237010e4"
+
+[[projects]]
+  branch = "master"
+  name = "k8s.io/gengo"
+  packages = [
+    "args",
+    "examples/deepcopy-gen/generators",
+    "examples/set-gen/sets",
+    "generator",
+    "namer",
+    "parser",
+    "types"
+  ]
+  revision = "0689ccc1d7d65d9dd1bedcc3b0b1ed7df91ba266"
+
+[[projects]]
   name = "k8s.io/klog"
   packages = ["."]
   revision = "a5bc97fbc634d635061f3146511332c7e313a55a"
@@ -400,6 +447,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e829a589bd820ac728ea212f50b1fff646d5359440203261f2dd35aab8f10fed"
+  inputs-digest = "263a54a07ce3592feea446cff98750b2ae8843e81e895c3a52c0713e1b4cf965"
   solver-name = "gps-cdcl"
   solver-version = 1

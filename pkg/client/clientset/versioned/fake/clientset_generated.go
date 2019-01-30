@@ -20,8 +20,8 @@ package fake
 
 import (
 	clientset "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned"
-	baremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned/typed/baremetalmachineproviderconfig/v1alpha1"
-	fakebaremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned/typed/baremetalmachineproviderconfig/v1alpha1/fake"
+	baremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned/typed/baremetalproviderconfig/v1alpha1"
+	fakebaremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned/typed/baremetalproviderconfig/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"

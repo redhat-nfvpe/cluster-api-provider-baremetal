@@ -19,7 +19,7 @@ limitations under the License.
 package fake
 
 import (
-	baremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalmachineproviderconfig/v1alpha1"
+	baremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalproviderconfig/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"

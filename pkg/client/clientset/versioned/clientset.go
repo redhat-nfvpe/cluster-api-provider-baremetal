@@ -19,7 +19,7 @@ limitations under the License.
 package versioned
 
 import (
-	baremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned/typed/baremetalmachineproviderconfig/v1alpha1"
+	baremetalproviderconfigv1alpha1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/client/clientset/versioned/typed/baremetalproviderconfig/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"

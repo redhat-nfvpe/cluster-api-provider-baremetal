@@ -5,8 +5,9 @@ import (
 	"io/ioutil"
 
 	"github.com/golang/glog"
+
 	machineactuator "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/actuators/machine"
-	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalmachineproviderconfig/v1alpha1"
+	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalproviderconfig/v1alpha1"
 	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/test"
 	yaml "gopkg.in/yaml.v2"
 	"k8s.io/apimachinery/pkg/runtime"

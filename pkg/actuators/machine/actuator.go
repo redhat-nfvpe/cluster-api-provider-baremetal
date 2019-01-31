@@ -27,8 +27,8 @@ var MachineActuator *Actuator
 
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
-	clusterClient clusterClient.Interface
-	kubeClient    Kubernetes.Interface
+	clusterClient clusterclient.Interface
+	kubeClient    kubernetes.Interface
 	eventRecorder record.EventRecorder
 }
 

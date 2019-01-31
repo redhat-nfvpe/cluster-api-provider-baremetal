@@ -31,6 +31,12 @@ type BaremetalProviderConfigStatus struct {
 	Status string `json:"status"`
 }
 
+// BaremetalClusterProviderConfig is the type that will be embedded in a Cluster.Spec.ProviderSpec field.
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type BaremetalClusterProviderConfig struct {
+	metav1.TypeMeta `json:",inline"`
+}
+
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // BaremetalProviderConfigList contains a list of BaremetalProviderConfig

@@ -21,7 +21,6 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	metav1validation "k8s.io/apimachinery/pkg/apis/meta/v1/validation"
-
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"sigs.k8s.io/cluster-api/pkg/apis/cluster/common"
@@ -120,7 +119,7 @@ type MachineSetStatus struct {
 	// These fields should not be set for transitive errors that a
 	// controller faces that are expected to be fixed automatically over
 	// time (like service outages), but instead indicate that something is
-	// fundamentally wrong with the MachineTemplates's spec or the configuration of
+	// fundamentally wrong with the MachineTemplate's spec or the configuration of
 	// the machine controller, and that manual intervention is required. Examples
 	// of terminal errors would be invalid combinations of settings in the
 	// spec, values that are unsupported by the machine controller, or the

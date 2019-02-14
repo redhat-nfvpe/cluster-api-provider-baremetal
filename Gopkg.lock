@@ -81,7 +81,7 @@
     ".",
     "diskcache"
   ]
-  revision = "7a902570cb17174de4ac788094f8ebedec136f57"
+  revision = "3befbb6ad0cc97d4c25d851e9528915809e1a22f"
 
 [[projects]]
   name = "github.com/hashicorp/golang-lru"
@@ -267,7 +267,7 @@
     "http2/hpack",
     "idna"
   ]
-  revision = "65e2d4e15006aab9813ff8769e768bbf4bb667a0"
+  revision = "3a22650c66bd7f4fb6d1e8072ffd7b75c8a27898"
 
 [[projects]]
   branch = "master"
@@ -276,7 +276,7 @@
     ".",
     "internal"
   ]
-  revision = "80673b4a4bfc6c2c58a0b44cf9106913fe293994"
+  revision = "3e8b2be1363542a95c52ea0796d4a40dacfb5b95"
 
 [[projects]]
   branch = "master"
@@ -285,7 +285,7 @@
     "unix",
     "windows"
   ]
-  revision = "3b5209105503162ded1863c307ac66fec31120dd"
+  revision = "983097b1a8a340cd1cc7df17d735154d89e10b1a"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -414,7 +414,7 @@
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
   ]
-  revision = "01b4f3c039db586ed6ec299cf30cc0e5a2a625d1"
+  revision = "4143c51bc1440efed73d24c8d441439784c4b754"
 
 [[projects]]
   name = "k8s.io/apimachinery"
@@ -582,6 +582,7 @@
   revision = "d7c86cdc46e3a4fcf892b32dd7bc3aa775e0870e"
 
 [[projects]]
+  branch = "master"
   name = "sigs.k8s.io/cluster-api"
   packages = [
     "pkg/apis/cluster/common",
@@ -591,9 +592,8 @@
     "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1",
     "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake"
   ]
-  revision = "3547f8dd93078c0b0f0b221ee1c2a57f96673081"
+  revision = "256aac9982feb78e1790339f5b8945762dd3f056"
   source = "https://github.com/kubernetes-sigs/cluster-api"
-  version = "0.0.0-alpha.4"
 
 [[projects]]
   name = "sigs.k8s.io/controller-runtime"
@@ -610,6 +610,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1874c201aab72bbeaf6b4bcb55d3f3209dd99b57c80be7548f96256c8e3cc519"
+  inputs-digest = "7d4cd2ea413a390e5d12bffc5fe925d0f345fa943d9fba6e80c995b1450fb408"
   solver-name = "gps-cdcl"
   solver-version = 1

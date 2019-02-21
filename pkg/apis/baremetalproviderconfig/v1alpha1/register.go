@@ -47,8 +47,8 @@ func Resource(resource string) schema.GroupResource {
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(
 		SchemeGroupVersion,
-		&BaremetalProviderConfig{},
-		&BaremetalProviderConfigList{},
+		&BaremetalMachineProviderConfig{},
+		&BaremetalMachineProviderConfigList{},
 	)
 
 	// register the type in the scheme

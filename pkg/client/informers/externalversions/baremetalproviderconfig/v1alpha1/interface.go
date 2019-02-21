@@ -24,8 +24,8 @@ import (
 
 // Interface provides access to all the informers in this group version.
 type Interface interface {
-	// BaremetalProviderConfigs returns a BaremetalProviderConfigInformer.
-	BaremetalProviderConfigs() BaremetalProviderConfigInformer
+	// BaremetalMachineProviderConfigs returns a BaremetalMachineProviderConfigInformer.
+	BaremetalMachineProviderConfigs() BaremetalMachineProviderConfigInformer
 }
 
 type version struct {
@@ -39,7 +39,7 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
 }
 
-// BaremetalProviderConfigs returns a BaremetalProviderConfigInformer.
-func (v *version) BaremetalProviderConfigs() BaremetalProviderConfigInformer {
-	return &baremetalProviderConfigInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+// BaremetalMachineProviderConfigs returns a BaremetalMachineProviderConfigInformer.
+func (v *version) BaremetalMachineProviderConfigs() BaremetalMachineProviderConfigInformer {
+	return &baremetalMachineProviderConfigInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

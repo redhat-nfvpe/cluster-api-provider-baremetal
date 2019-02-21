@@ -4,12 +4,12 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
-  name: baremetalproviderconfigs.baremetalproviderconfig.k8s.io
+  name: baremetalmachineproviderconfigs.baremetalproviderconfig.k8s.io
 spec:
   group: baremetalproviderconfig.k8s.io
   names:
-    kind: BaremetalProviderConfig
-    plural: baremetalproviderconfigs
+    kind: BaremetalMachineProviderConfig
+    plural: baremetalmachineproviderconfigs
   scope: Namespaced
   validation:
     openAPIV3Schema:

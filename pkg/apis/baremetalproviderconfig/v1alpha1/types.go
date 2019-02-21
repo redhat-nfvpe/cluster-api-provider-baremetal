@@ -8,24 +8,24 @@ import (
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// BaremetalProviderConfig
-type BaremetalProviderConfig struct {
+// BaremetalMachineProviderConfig
+type BaremetalMachineProviderConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	IgnKey string `json:"ignKey"`
 
-	Spec   BaremetalProviderConfigSpec   `json:"spec"`
-	Status BaremetalProviderConfigStatus `json:"status"`
+	Spec   BaremetalMachineProviderConfigSpec   `json:"spec"`
+	Status BaremetalMachineProviderConfigStatus `json:"status"`
 }
 
-// BaremetalProviderConfigSpec
-type BaremetalProviderConfigSpec struct {
+// BaremetalMachineProviderConfigSpec
+type BaremetalMachineProviderConfigSpec struct {
 	Something string `json:"something"`
 }
 
-// BaremetalProviderStatus is the type that will be embedded in a Machine.Status.ProviderStatus field.
-type BaremetalProviderConfigStatus struct {
+// BaremetalMachineProviderStatus is the type that will be embedded in a Machine.Status.ProviderStatus field.
+type BaremetalMachineProviderConfigStatus struct {
 	metav1.TypeMeta `json:",inline"`
 
 	Status string `json:"status"`
@@ -40,8 +40,8 @@ type BaremetalClusterProviderConfig struct {
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
 // BaremetalProviderConfigList contains a list of BaremetalProviderConfig
-type BaremetalProviderConfigList struct {
+type BaremetalMachineProviderConfigList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []BaremetalProviderConfig `json:"items"`
+	Items           []BaremetalMachineProviderConfig `json:"items"`
 }

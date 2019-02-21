@@ -42,6 +42,10 @@ version="v1.4.7"
   name = "k8s.io/apimachinery"
   version = "kubernetes-1.13.0"
 
+[[constraint]]
+  name = "k8s.io/client-go"
+  version = "kubernetes-1.11.2"
+
 [[override]]
   name = "sigs.k8s.io/cluster-api"
   source = "https://github.com/kubernetes-sigs/cluster-api"

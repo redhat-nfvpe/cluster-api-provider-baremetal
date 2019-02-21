@@ -28,8 +28,8 @@ type FakeBaremetalproviderconfigV1alpha1 struct {
 	*testing.Fake
 }
 
-func (c *FakeBaremetalproviderconfigV1alpha1) BaremetalProviderConfigs(namespace string) v1alpha1.BaremetalProviderConfigInterface {
-	return &FakeBaremetalProviderConfigs{c, namespace}
+func (c *FakeBaremetalproviderconfigV1alpha1) BaremetalMachineProviderConfigs(namespace string) v1alpha1.BaremetalMachineProviderConfigInterface {
+	return &FakeBaremetalMachineProviderConfigs{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

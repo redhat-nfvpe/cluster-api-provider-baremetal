@@ -1,14 +1,14 @@
 package test
 
 import (
+	"github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset"
+	clusterv1alpha1 "github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1"
+	fakeclusterv1alpha1 "github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
-	"sigs.k8s.io/cluster-api/pkg/client/clientset_generated/clientset"
-	clusterv1alpha1 "sigs.k8s.io/cluster-api/pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1"
-	fakeclusterv1alpha1 "sigs.k8s.io/cluster-api/pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake"
 )
 
 // Clientset implements clientset.Interface. Meant to be embedded into a

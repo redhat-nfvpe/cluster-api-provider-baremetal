@@ -17,18 +17,22 @@ import (
 	"context"
 
 	"github.com/golang/glog"
+	"github.com/pkg/errors"
+	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/actuators"
 	server "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/server"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 
-	clusterv1 "sigs.k8s.io/cluster-api/pkg/apis/cluster/v1alpha1"
-	clusterclient "sigs.k8s.io/cluster-api/pkg/client/clientset_generated/clientset"
+	clusterv1 "github.com/openshift/cluster-api/pkg/apis/cluster/v1alpha1"
+	clusterclient "github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset"
+	client "github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1"
 )
 
 var MachineActuator *Actuator
 
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
+	client          client.ClusterV1alpha1Interface
 	clusterClient   clusterclient.Interface
 	kubeClient      kubernetes.Interface
 	eventRecorder   record.EventRecorder
@@ -73,6 +77,15 @@ const (
 // Create creates a machine and is invoked by the Machine Controller
 func (a *Actuator) Create(context context.Context, cluster *clusterv1.Cluster, machine *clusterv1.Machine) error {
 	glog.Infof("Creating machine %q for cluster %q.", machine.Name, cluster.Name)
+
+	scope, err := actuators.NewMachineScope(actuators.MachineScopeParams{Machine: machine, Cluster: cluster, Client: a.client})
+	if err != nil {
+		return errors.Errorf("failed to create scope: %+v", err)
+	}
+
+	defer scope.Close()
+
+	// Create goipmi object here and turn on machine?
 
 	return nil
 }

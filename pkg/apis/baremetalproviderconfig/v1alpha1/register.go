@@ -17,7 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
-	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"encoding/json"
+
+	clusterv1 "github.com/openshift/cluster-api/pkg/apis/cluster/v1alpha1"
+	yaml "gopkg.in/yaml.v2"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/runtime/scheme"
@@ -33,25 +36,81 @@ var (
 	SchemeBuilder = &scheme.Builder{GroupVersion: SchemeGroupVersion}
 )
 
-// Kind takes an unqualified kind and returns back a Group qualified GroupKind
-func Kind(kind string) schema.GroupKind {
-	return SchemeGroupVersion.WithKind(kind).GroupKind()
+// MachineStatusFromProviderStatus unmarshals a raw extension into a Baremetal machine type
+func MachineStatusFromProviderStatus(extension *runtime.RawExtension) (*BaremetalMachineProviderStatus, error) {
+	if extension == nil {
+		return &BaremetalMachineProviderStatus{}, nil
+	}
+
+	status := new(BaremetalMachineProviderStatus)
+	if err := yaml.Unmarshal(extension.Raw, status); err != nil {
+		return nil, err
+	}
+
+	return status, nil
 }
 
-// Resource takes an unqualified resource and returns a Group qualified GroupResource
-func Resource(resource string) schema.GroupResource {
-	return SchemeGroupVersion.WithResource(resource).GroupResource()
+// ClusterConfigFromProviderSpec unmarshals a provider config into an AWS Cluster type
+func ClusterConfigFromProviderSpec(providerConfig clusterv1.ProviderSpec) (*BaremetalClusterProviderSpec, error) {
+	var config BaremetalClusterProviderSpec
+	if providerConfig.Value == nil {
+		return &config, nil
+	}
+
+	if err := yaml.Unmarshal(providerConfig.Value.Raw, &config); err != nil {
+		return nil, err
+	}
+	return &config, nil
 }
 
-// addKnownTypes adds our types to the API scheme by registering
-func addKnownTypes(scheme *runtime.Scheme) error {
-	scheme.AddKnownTypes(
-		SchemeGroupVersion,
-		&BaremetalMachineProviderConfig{},
-		&BaremetalMachineProviderConfigList{},
-	)
+// ClusterStatusFromProviderStatus unmarshals a raw extension into an AWS Cluster type
+func ClusterStatusFromProviderStatus(extension *runtime.RawExtension) (*BaremetalClusterProviderStatus, error) {
+	if extension == nil {
+		return &BaremetalClusterProviderStatus{}, nil
+	}
 
-	// register the type in the scheme
-	meta_v1.AddToGroupVersion(scheme, SchemeGroupVersion)
-	return nil
+	status := new(BaremetalClusterProviderStatus)
+	if err := yaml.Unmarshal(extension.Raw, status); err != nil {
+		return nil, err
+	}
+
+	return status, nil
+}
+
+// EncodeClusterSpec marshals the cluster provider spec.
+func EncodeClusterSpec(spec *BaremetalClusterProviderSpec) (*runtime.RawExtension, error) {
+	if spec == nil {
+		return &runtime.RawExtension{}, nil
+	}
+
+	var rawBytes []byte
+	var err error
+
+	//  TODO: use apimachinery conversion https://godoc.org/k8s.io/apimachinery/pkg/runtime#Convert_runtime_Object_To_runtime_RawExtension
+	if rawBytes, err = json.Marshal(spec); err != nil {
+		return nil, err
+	}
+
+	return &runtime.RawExtension{
+		Raw: rawBytes,
+	}, nil
+}
+
+// EncodeClusterStatus marshals the cluster status.
+func EncodeClusterStatus(status *BaremetalClusterProviderStatus) (*runtime.RawExtension, error) {
+	if status == nil {
+		return &runtime.RawExtension{}, nil
+	}
+
+	var rawBytes []byte
+	var err error
+
+	//  TODO: use apimachinery conversion https://godoc.org/k8s.io/apimachinery/pkg/runtime#Convert_runtime_Object_To_runtime_RawExtension
+	if rawBytes, err = json.Marshal(status); err != nil {
+		return nil, err
+	}
+
+	return &runtime.RawExtension{
+		Raw: rawBytes,
+	}, nil
 }

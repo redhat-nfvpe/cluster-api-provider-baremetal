@@ -8,12 +8,6 @@
   version = "v1.1.1"
 
 [[projects]]
-  name = "github.com/evanphx/json-patch"
-  packages = ["."]
-  revision = "72bf35d0ff611848c1dc9df0f976c81192392fa5"
-  version = "v4.1.0"
-
-[[projects]]
   name = "github.com/gogo/protobuf"
   packages = [
     "proto",
@@ -188,6 +182,7 @@
     "pkg/client/clientset_generated/clientset",
     "pkg/client/clientset_generated/clientset/scheme",
     "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1",
+    "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake",
     "pkg/client/clientset_generated/clientset/typed/machine/v1beta1"
   ]
   revision = "91fca585a85b163ddfd119fd09c128c9feadddca"
@@ -257,8 +252,6 @@
   branch = "master"
   name = "golang.org/x/net"
   packages = [
-    "context",
-    "context/ctxhttp",
     "html",
     "html/atom",
     "html/charset",
@@ -268,15 +261,6 @@
     "idna"
   ]
   revision = "3a22650c66bd7f4fb6d1e8072ffd7b75c8a27898"
-
-[[projects]]
-  branch = "master"
-  name = "golang.org/x/oauth2"
-  packages = [
-    ".",
-    "internal"
-  ]
-  revision = "3e8b2be1363542a95c52ea0796d4a40dacfb5b95"
 
 [[projects]]
   branch = "master"
@@ -327,20 +311,6 @@
   revision = "85acf8d2951cb2a3bde7632f9ff273ef0379bcbd"
 
 [[projects]]
-  name = "google.golang.org/appengine"
-  packages = [
-    "internal",
-    "internal/base",
-    "internal/datastore",
-    "internal/log",
-    "internal/remote_api",
-    "internal/urlfetch",
-    "urlfetch"
-  ]
-  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
-  version = "v1.4.0"
-
-[[projects]]
   name = "gopkg.in/fsnotify.v1"
   packages = ["."]
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
@@ -374,19 +344,16 @@
     "apps/v1",
     "apps/v1beta1",
     "apps/v1beta2",
-    "auditregistration/v1alpha1",
     "authentication/v1",
     "authentication/v1beta1",
     "authorization/v1",
     "authorization/v1beta1",
     "autoscaling/v1",
     "autoscaling/v2beta1",
-    "autoscaling/v2beta2",
     "batch/v1",
     "batch/v1beta1",
     "batch/v2alpha1",
     "certificates/v1beta1",
-    "coordination/v1beta1",
     "core/v1",
     "events/v1beta1",
     "extensions/v1beta1",
@@ -485,8 +452,6 @@
     "kubernetes/typed/apps/v1beta1/fake",
     "kubernetes/typed/apps/v1beta2",
     "kubernetes/typed/apps/v1beta2/fake",
-    "kubernetes/typed/auditregistration/v1alpha1",
-    "kubernetes/typed/auditregistration/v1alpha1/fake",
     "kubernetes/typed/authentication/v1",
     "kubernetes/typed/authentication/v1/fake",
     "kubernetes/typed/authentication/v1beta1",
@@ -499,8 +464,6 @@
     "kubernetes/typed/autoscaling/v1/fake",
     "kubernetes/typed/autoscaling/v2beta1",
     "kubernetes/typed/autoscaling/v2beta1/fake",
-    "kubernetes/typed/autoscaling/v2beta2",
-    "kubernetes/typed/autoscaling/v2beta2/fake",
     "kubernetes/typed/batch/v1",
     "kubernetes/typed/batch/v1/fake",
     "kubernetes/typed/batch/v1beta1",
@@ -509,8 +472,6 @@
     "kubernetes/typed/batch/v2alpha1/fake",
     "kubernetes/typed/certificates/v1beta1",
     "kubernetes/typed/certificates/v1beta1/fake",
-    "kubernetes/typed/coordination/v1beta1",
-    "kubernetes/typed/coordination/v1beta1/fake",
     "kubernetes/typed/core/v1",
     "kubernetes/typed/core/v1/fake",
     "kubernetes/typed/events/v1beta1",
@@ -566,8 +527,8 @@
     "util/integer",
     "util/retry"
   ]
-  revision = "e64494209f554a6723674bd494d69445fb76a1d4"
-  version = "v10.0.0"
+  revision = "1f13a808da65775f22cbf47862c4e5898d8f4ca1"
+  version = "kubernetes-1.11.2"
 
 [[projects]]
   name = "k8s.io/klog"
@@ -586,11 +547,7 @@
   name = "sigs.k8s.io/cluster-api"
   packages = [
     "pkg/apis/cluster/common",
-    "pkg/apis/cluster/v1alpha1",
-    "pkg/client/clientset_generated/clientset",
-    "pkg/client/clientset_generated/clientset/scheme",
-    "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1",
-    "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake"
+    "pkg/apis/cluster/v1alpha1"
   ]
   revision = "256aac9982feb78e1790339f5b8945762dd3f056"
   source = "https://github.com/kubernetes-sigs/cluster-api"
@@ -610,6 +567,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7d4cd2ea413a390e5d12bffc5fe925d0f345fa943d9fba6e80c995b1450fb408"
+  inputs-digest = "d306a1f4dc550b9fec79c9d4c3aca193b0793587c421fa62c8fd0f09a3a8e075"
   solver-name = "gps-cdcl"
   solver-version = 1

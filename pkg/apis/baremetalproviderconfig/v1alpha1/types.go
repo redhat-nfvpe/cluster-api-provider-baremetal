@@ -8,40 +8,49 @@ import (
 // +genclient:noStatus
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// BaremetalMachineProviderConfig
-type BaremetalMachineProviderConfig struct {
+// BaremetalMachineProviderSpec
+type BaremetalMachineProviderSpec struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	IgnKey string `json:"ignKey"`
 
-	Spec   BaremetalMachineProviderConfigSpec   `json:"spec"`
-	Status BaremetalMachineProviderConfigStatus `json:"status"`
+	Ipmi *Ipmi `json:"ipmi"`
 }
 
-// BaremetalMachineProviderConfigSpec
-type BaremetalMachineProviderConfigSpec struct {
-	Something string `json:"something"`
+// Ipmi contains the info for the actuator to start the actual baremetal machine
+type Ipmi struct {
+	HostAddress string `json:"hostAddress"`
+	// FIXME: store these as a secret?
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // BaremetalMachineProviderStatus is the type that will be embedded in a Machine.Status.ProviderStatus field.
-type BaremetalMachineProviderConfigStatus struct {
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type BaremetalMachineProviderStatus struct {
 	metav1.TypeMeta `json:",inline"`
 
 	Status string `json:"status"`
 }
 
-// BaremetalClusterProviderConfig is the type that will be embedded in a Cluster.Spec.ProviderSpec field.
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-type BaremetalClusterProviderConfig struct {
+// BaremetalProviderConfigList contains a list of BaremetalProviderConfig
+type BaremetalMachineProviderSpecList struct {
 	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []BaremetalMachineProviderSpec `json:"items"`
+}
+
+// BaremetalClusterProviderSpec is the type that will be embedded in a Cluster.Spec.ProviderSpec field.
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+type BaremetalClusterProviderSpec struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-
-// BaremetalProviderConfigList contains a list of BaremetalProviderConfig
-type BaremetalMachineProviderConfigList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []BaremetalMachineProviderConfig `json:"items"`
+type BaremetalClusterProviderStatus struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 }

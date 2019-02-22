@@ -27,7 +27,7 @@ import (
 
 type BaremetalproviderconfigV1alpha1Interface interface {
 	RESTClient() rest.Interface
-	BaremetalProviderConfigsGetter
+	BaremetalMachineProviderConfigsGetter
 }
 
 // BaremetalproviderconfigV1alpha1Client is used to interact with features provided by the baremetalproviderconfig.k8s.io group.
@@ -35,8 +35,8 @@ type BaremetalproviderconfigV1alpha1Client struct {
 	restClient rest.Interface
 }
 
-func (c *BaremetalproviderconfigV1alpha1Client) BaremetalProviderConfigs(namespace string) BaremetalProviderConfigInterface {
-	return newBaremetalProviderConfigs(c, namespace)
+func (c *BaremetalproviderconfigV1alpha1Client) BaremetalMachineProviderConfigs(namespace string) BaremetalMachineProviderConfigInterface {
+	return newBaremetalMachineProviderConfigs(c, namespace)
 }
 
 // NewForConfig creates a new BaremetalproviderconfigV1alpha1Client for the given config.

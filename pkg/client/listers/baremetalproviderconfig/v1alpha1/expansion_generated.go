@@ -18,10 +18,10 @@ limitations under the License.
 
 package v1alpha1
 
-// BaremetalProviderConfigListerExpansion allows custom methods to be added to
-// BaremetalProviderConfigLister.
-type BaremetalProviderConfigListerExpansion interface{}
+// BaremetalMachineProviderConfigListerExpansion allows custom methods to be added to
+// BaremetalMachineProviderConfigLister.
+type BaremetalMachineProviderConfigListerExpansion interface{}
 
-// BaremetalProviderConfigNamespaceListerExpansion allows custom methods to be added to
-// BaremetalProviderConfigNamespaceLister.
-type BaremetalProviderConfigNamespaceListerExpansion interface{}
+// BaremetalMachineProviderConfigNamespaceListerExpansion allows custom methods to be added to
+// BaremetalMachineProviderConfigNamespaceLister.
+type BaremetalMachineProviderConfigNamespaceListerExpansion interface{}

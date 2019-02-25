@@ -119,7 +119,7 @@ func (c *FakeBaremetalMachineProviderSpecs) DeleteCollection(options *v1.DeleteO
 // Patch applies the patch and returns the patched baremetalMachineProviderSpec.
 func (c *FakeBaremetalMachineProviderSpecs) Patch(name string, pt types.PatchType, data []byte, subresources ...string) (result *v1alpha1.BaremetalMachineProviderSpec, err error) {
 	obj, err := c.Fake.
-		Invokes(testing.NewPatchSubresourceAction(baremetalmachineproviderspecsResource, c.ns, name, pt, data, subresources...), &v1alpha1.BaremetalMachineProviderSpec{})
+		Invokes(testing.NewPatchSubresourceAction(baremetalmachineproviderspecsResource, c.ns, name, data, subresources...), &v1alpha1.BaremetalMachineProviderSpec{})
 
 	if obj == nil {
 		return nil, err

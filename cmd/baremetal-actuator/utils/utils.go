@@ -5,10 +5,10 @@ import (
 	"io/ioutil"
 
 	apiv1 "k8s.io/api/core/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 
 	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
 	machineactuator "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/actuators/machine"
-	test "github.com/redhat-nfvpe/cluster-api-provider-baremetal/test"
 	yaml "gopkg.in/yaml.v2"
 	"k8s.io/apimachinery/pkg/runtime"
 	kubernetesfake "k8s.io/client-go/kubernetes/fake"
@@ -20,10 +20,12 @@ func CreateActuator(machine *machinev1.Machine, userData *apiv1.Secret) *machine
 	if userData != nil {
 		objList = append(objList, userData)
 	}
+
+	fakeClient := fake.NewFakeClient(objList...)
 	fakeKubeClient := kubernetesfake.NewSimpleClientset(objList...)
 
 	params := machineactuator.ActuatorParams{
-		ClusterClient:       test.NewSimpleClientset(machine),
+		Client:              fakeClient,
 		KubeClient:          fakeKubeClient,
 		EventRecorder:       &record.FakeRecorder{},
 		ServerListenAddress: "localhost:8081",

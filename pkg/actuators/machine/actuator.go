@@ -18,22 +18,19 @@ import (
 
 	"github.com/golang/glog"
 	"github.com/pkg/errors"
-	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/actuators"
 	server "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/server"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 
-	clusterv1 "github.com/openshift/cluster-api/pkg/apis/cluster/v1alpha1"
-	clusterclient "github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset"
-	client "github.com/openshift/cluster-api/pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1"
+	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
+	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 var MachineActuator *Actuator
 
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
-	client          client.ClusterV1alpha1Interface
-	clusterClient   clusterclient.Interface
+	client          client.Client
 	kubeClient      kubernetes.Interface
 	eventRecorder   record.EventRecorder
 	baremetalServer server.BaremetalServer
@@ -41,7 +38,7 @@ type Actuator struct {
 
 // ActuatorParams holds parameter information for Actuator
 type ActuatorParams struct {
-	ClusterClient       clusterclient.Interface
+	Client              client.Client
 	KubeClient          kubernetes.Interface
 	EventRecorder       record.EventRecorder
 	ServerListenAddress string
@@ -51,7 +48,7 @@ type ActuatorParams struct {
 func NewActuator(params ActuatorParams) (*Actuator, error) {
 
 	actuator := &Actuator{
-		clusterClient: params.ClusterClient,
+		client:        params.Client,
 		kubeClient:    params.KubeClient,
 		eventRecorder: params.EventRecorder,
 	}
@@ -75,18 +72,21 @@ const (
 )
 
 // Create creates a machine and is invoked by the Machine Controller
-func (a *Actuator) Create(context context.Context, cluster *clusterv1.Cluster, machine *clusterv1.Machine) error {
+func (a *Actuator) Create(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
 	glog.Infof("Creating machine %q for cluster %q.", machine.Name, cluster.Name)
 
-	scope, err := actuators.NewMachineScope(actuators.MachineScopeParams{Machine: machine, Cluster: cluster, Client: a.client})
+	err := a.CreateMachine(cluster, machine)
+
 	if err != nil {
-		return errors.Errorf("failed to create scope: %+v", err)
+		return errors.Errorf("failed to create machine: %+v", err)
 	}
 
-	defer scope.Close()
+	return nil
+}
 
-	// Create goipmi object here and turn on machine?
-
+// CreateMachine should start the target machine via goimpi
+func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.Machine) error {
+	// TODO
 	return nil
 }
 

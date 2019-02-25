@@ -5,11 +5,5 @@ RUN go build -o actuator ./cmd/baremetal-actuator
 RUN go build -o manager ./vendor/github.com/openshift/cluster-api/cmd/manager
 
 FROM registry.svc.ci.openshift.org/openshift/origin-v4.0:base
-RUN INSTALL_PKGS=" \
-      openssh-clients \
-      " && \
-    yum install -y $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    yum clean all
 COPY --from=builder /go/src/github.com/redhat-nfvpe/cluster-api-provider-baremetal/manager /
 COPY --from=builder /go/src/github.com/redhat-nfvpe/cluster-api-provider-baremetal/actuator /

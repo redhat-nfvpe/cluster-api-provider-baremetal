@@ -1,0 +1,9 @@
+FROM registry.svc.ci.openshift.org/openshift/release:golang-1.10 AS builder
+WORKDIR /go/src/github.com/redhat-nfvpe/cluster-api-provider-baremetal
+COPY . .
+RUN go build -o actuator ./cmd/baremetal-actuator
+RUN go build -o manager ./vendor/github.com/openshift/cluster-api/cmd/manager
+
+FROM registry.svc.ci.openshift.org/openshift/origin-v4.0:base
+COPY --from=builder /go/src/github.com/redhat-nfvpe/cluster-api-provider-baremetal/manager /
+COPY --from=builder /go/src/github.com/redhat-nfvpe/cluster-api-provider-baremetal/actuator /

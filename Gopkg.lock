@@ -26,10 +26,22 @@
   version = "v1.1.1"
 
 [[projects]]
-  name = "github.com/evanphx/json-patch"
+  name = "github.com/ghodss/yaml"
   packages = ["."]
-  revision = "72bf35d0ff611848c1dc9df0f976c81192392fa5"
-  version = "v4.1.0"
+  revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/go-logr/logr"
+  packages = ["."]
+  revision = "9fb12b3b21c5415d16ac18dc5cd42c1cfdd40c4e"
+  version = "v0.1.0"
+
+[[projects]]
+  name = "github.com/go-logr/zapr"
+  packages = ["."]
+  revision = "7536572e8d55209135cd5e7ccf7fce43dca217ab"
+  version = "v0.1.0"
 
 [[projects]]
   name = "github.com/go-logr/logr"
@@ -226,14 +238,10 @@
     "pkg/client/clientset_generated/clientset",
     "pkg/client/clientset_generated/clientset/scheme",
     "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1",
+    "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake",
     "pkg/client/clientset_generated/clientset/typed/machine/v1beta1",
-    "pkg/controller",
-    "pkg/controller/machinedeployment",
-    "pkg/controller/machinedeployment/util",
-    "pkg/controller/machineset",
-    "pkg/controller/node",
-    "pkg/controller/noderefutil",
-    "pkg/util"
+    "pkg/client/clientset_generated/clientset/typed/machine/v1beta1/fake",
+    "pkg/errors"
   ]
   revision = "91fca585a85b163ddfd119fd09c128c9feadddca"
 
@@ -348,6 +356,37 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/vmware/goipmi"
+  packages = ["."]
+  revision = "2333cd82d7020d1701c082e98870cb64a97988a2"
+
+[[projects]]
+  name = "go.uber.org/atomic"
+  packages = ["."]
+  revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
+  version = "v1.3.2"
+
+[[projects]]
+  name = "go.uber.org/multierr"
+  packages = ["."]
+  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
+  version = "v1.1.0"
+
+[[projects]]
+  name = "go.uber.org/zap"
+  packages = [
+    ".",
+    "buffer",
+    "internal/bufferpool",
+    "internal/color",
+    "internal/exit",
+    "zapcore"
+  ]
+  revision = "ff33455a0e382e8a81d14dd7c922020b6b5e7982"
+  version = "v1.9.1"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/crypto"
   packages = [
     "curve25519",
@@ -387,7 +426,7 @@
     "jws",
     "jwt"
   ]
-  revision = "3e8b2be1363542a95c52ea0796d4a40dacfb5b95"
+  revision = "9b3c75971fc92dd27c6436a37c05c831498658f1"
 
 [[projects]]
   branch = "master"
@@ -438,6 +477,25 @@
   revision = "85acf8d2951cb2a3bde7632f9ff273ef0379bcbd"
 
 [[projects]]
+  branch = "master"
+  name = "golang.org/x/tools"
+  packages = [
+    "go/ast/astutil",
+    "go/gcexportdata",
+    "go/internal/cgo",
+    "go/internal/gcimporter",
+    "go/internal/packagesdriver",
+    "go/packages",
+    "go/types/typeutil",
+    "imports",
+    "internal/fastwalk",
+    "internal/gopathwalk",
+    "internal/module",
+    "internal/semver"
+  ]
+  revision = "83362c3779f5f48611068d488a03ea7bbaddc81e"
+
+[[projects]]
   name = "google.golang.org/appengine"
   packages = [
     ".",
@@ -480,6 +538,7 @@
   version = "v2.2.2"
 
 [[projects]]
+  branch = "release-1.12"
   name = "k8s.io/api"
   packages = [
     "admission/v1beta1",
@@ -488,7 +547,6 @@
     "apps/v1",
     "apps/v1beta1",
     "apps/v1beta2",
-    "auditregistration/v1alpha1",
     "authentication/v1",
     "authentication/v1beta1",
     "authorization/v1",
@@ -516,11 +574,9 @@
     "storage/v1alpha1",
     "storage/v1beta1"
   ]
-  revision = "05914d821849570fba9eacfb29466f2d8d3cd229"
-  version = "kubernetes-1.13.1"
+  revision = "6db15a15d2d3874a6c3ddb2140ac9f3bc7058428"
 
 [[projects]]
-  branch = "master"
   name = "k8s.io/apiextensions-apiserver"
   packages = [
     "pkg/apis/apiextensions",
@@ -529,7 +585,8 @@
     "pkg/client/clientset/clientset/scheme",
     "pkg/client/clientset/clientset/typed/apiextensions/v1beta1"
   ]
-  revision = "4143c51bc1440efed73d24c8d441439784c4b754"
+  revision = "a384d17938fe55d54a52d5668bf0ff40044daef0"
+  version = "kubernetes-1.12.5"
 
 [[projects]]
   name = "k8s.io/apimachinery"
@@ -581,9 +638,11 @@
     "third_party/forked/golang/json",
     "third_party/forked/golang/reflect"
   ]
-  revision = "2b1284ed4c93a43499e781493253e2ac5959c4fd"
+  revision = "49ce2735e5074ffc3f8190c8406cf51a96302dad"
+  version = "kubernetes-1.12.4"
 
 [[projects]]
+  branch = "release-9.0"
   name = "k8s.io/client-go"
   packages = [
     "discovery",
@@ -602,8 +661,6 @@
     "kubernetes/typed/apps/v1beta1/fake",
     "kubernetes/typed/apps/v1beta2",
     "kubernetes/typed/apps/v1beta2/fake",
-    "kubernetes/typed/auditregistration/v1alpha1",
-    "kubernetes/typed/auditregistration/v1alpha1/fake",
     "kubernetes/typed/authentication/v1",
     "kubernetes/typed/authentication/v1/fake",
     "kubernetes/typed/authentication/v1beta1",
@@ -690,8 +747,31 @@
     "util/retry",
     "util/workqueue"
   ]
-  revision = "8d9ed539ba3134352c586810e749e58df4e94e4f"
-  version = "kubernetes-1.13.1"
+  revision = "701b913670036511e3d752318272c97f1a2a2edd"
+
+[[projects]]
+  branch = "release-1.12"
+  name = "k8s.io/code-generator"
+  packages = [
+    "cmd/deepcopy-gen",
+    "cmd/deepcopy-gen/args",
+    "pkg/util"
+  ]
+  revision = "b1289fc74931d4b6b04bd1a259acfc88a2cb0a66"
+
+[[projects]]
+  branch = "master"
+  name = "k8s.io/gengo"
+  packages = [
+    "args",
+    "examples/deepcopy-gen/generators",
+    "examples/set-gen/sets",
+    "generator",
+    "namer",
+    "parser",
+    "types"
+  ]
+  revision = "0689ccc1d7d65d9dd1bedcc3b0b1ed7df91ba266"
 
 [[projects]]
   name = "k8s.io/klog"
@@ -710,59 +790,24 @@
   name = "sigs.k8s.io/cluster-api"
   packages = [
     "pkg/apis/cluster/common",
-    "pkg/apis/cluster/v1alpha1",
-    "pkg/client/clientset_generated/clientset",
-    "pkg/client/clientset_generated/clientset/scheme",
-    "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1",
-    "pkg/client/clientset_generated/clientset/typed/cluster/v1alpha1/fake"
+    "pkg/apis/cluster/v1alpha1"
   ]
   revision = "256aac9982feb78e1790339f5b8945762dd3f056"
-  source = "https://github.com/kubernetes-sigs/cluster-api"
 
 [[projects]]
   name = "sigs.k8s.io/controller-runtime"
   packages = [
-    "pkg/cache",
-    "pkg/cache/internal",
     "pkg/client",
     "pkg/client/apiutil",
-    "pkg/client/config",
-    "pkg/controller",
-    "pkg/event",
-    "pkg/handler",
-    "pkg/internal/controller",
-    "pkg/internal/controller/metrics",
-    "pkg/internal/recorder",
-    "pkg/leaderelection",
-    "pkg/manager",
-    "pkg/metrics",
-    "pkg/patch",
-    "pkg/predicate",
-    "pkg/reconcile",
-    "pkg/recorder",
-    "pkg/runtime/inject",
+    "pkg/client/fake",
     "pkg/runtime/log",
-    "pkg/runtime/scheme",
-    "pkg/runtime/signals",
-    "pkg/source",
-    "pkg/source/internal",
-    "pkg/webhook/admission",
-    "pkg/webhook/admission/types",
-    "pkg/webhook/internal/metrics",
-    "pkg/webhook/types"
+    "pkg/runtime/scheme"
   ]
-  revision = "12d98582e72927b6cd0123e2b4e819f9341ce62c"
-  version = "v0.1.10"
-
-[[projects]]
-  name = "sigs.k8s.io/yaml"
-  packages = ["."]
-  revision = "fd68e9863619f6ec2fdd8625fe1f02e7c877e480"
-  version = "v1.1.0"
+  revision = "c63ebda0bf4be5f0a8abd4003e4ea546032545ba"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "2a8c2c66f62639d6d37f53d7c78e7082380259b60a6bb076d3a6ce15da429f72"
+  inputs-digest = "34583f7a753cccc90a80381009cb8abf08a275e60938a82c0ddae45b41609894"
   solver-name = "gps-cdcl"
   solver-version = 1

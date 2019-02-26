@@ -1,0 +1,27 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: Machine
+metadata:
+  creationTimestamp: null
+  labels:
+    sigs.k8s.io/cluster-api-cluster: testcluster
+    sigs.k8s.io/cluster-api-machine-role: master
+    sigs.k8s.io/cluster-api-machine-type: master
+  name: testcluster-master-0
+  namespace: openshift-machine-api
+spec:
+  metadata:
+    creationTimestamp: null
+  providerSpec:
+    value:
+      apiVersion: baremetalconfig.k8s.io/v1alpha1
+      ignKey: ""
+      ignition:
+        userDataSecret: master-user-data
+      ipmi:
+        hostAddress: 10.19.110.18
+        username: ADMIN
+        password: ADMIN
+      kind: BaremetalMachineProviderSpec
+  versions:
+    kubelet: ""
+status: {}

@@ -15,29 +15,46 @@ package machine
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/golang/glog"
+	"github.com/pkg/errors"
 	server "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/server"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 
-	clusterv1 "sigs.k8s.io/cluster-api/pkg/apis/cluster/v1alpha1"
-	clusterclient "sigs.k8s.io/cluster-api/pkg/client/clientset_generated/clientset"
+	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
+	apierrors "github.com/openshift/cluster-api/pkg/errors"
+	corev1 "k8s.io/api/core/v1"
+	client "sigs.k8s.io/controller-runtime/pkg/client"
+
+	providerconfigv1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalproviderconfig/v1alpha1"
+
+	goipmi "github.com/vmware/goipmi"
 )
 
 var MachineActuator *Actuator
 
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
-	clusterClient   clusterclient.Interface
+	client          client.Client
 	kubeClient      kubernetes.Interface
 	eventRecorder   record.EventRecorder
+	codec           codec
 	baremetalServer server.BaremetalServer
+}
+
+type codec interface {
+	DecodeFromProviderSpec(machinev1.ProviderSpec, runtime.Object) error
+	DecodeProviderStatus(*runtime.RawExtension, runtime.Object) error
+	EncodeProviderStatus(runtime.Object) (*runtime.RawExtension, error)
 }
 
 // ActuatorParams holds parameter information for Actuator
 type ActuatorParams struct {
-	ClusterClient       clusterclient.Interface
+	Client              client.Client
+	Codec               codec
 	KubeClient          kubernetes.Interface
 	EventRecorder       record.EventRecorder
 	ServerListenAddress string
@@ -47,7 +64,8 @@ type ActuatorParams struct {
 func NewActuator(params ActuatorParams) (*Actuator, error) {
 
 	actuator := &Actuator{
-		clusterClient: params.ClusterClient,
+		client:        params.Client,
+		codec:         params.Codec,
 		kubeClient:    params.KubeClient,
 		eventRecorder: params.EventRecorder,
 	}
@@ -71,8 +89,60 @@ const (
 )
 
 // Create creates a machine and is invoked by the Machine Controller
-func (a *Actuator) Create(context context.Context, cluster *clusterv1.Cluster, machine *clusterv1.Machine) error {
+func (a *Actuator) Create(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
 	glog.Infof("Creating machine %q for cluster %q.", machine.Name, cluster.Name)
+
+	err := a.CreateMachine(cluster, machine)
+
+	if err != nil {
+		return errors.Errorf("failed to create machine: %+v", err)
+	}
+
+	return nil
+}
+
+// CreateMachine should extract data from spec and start the target machine via goimpi
+func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.Machine) error {
+
+	machineProviderConfig, err := ProviderConfigMachine(a.codec, &machine.Spec)
+	if err != nil {
+		return a.handleMachineError(machine, apierrors.InvalidMachineConfiguration("error getting machineProviderConfig from spec: %v", err), createEventAction)
+	}
+
+	hostAddress := machineProviderConfig.Ipmi.HostAddress
+	username := machineProviderConfig.Ipmi.Username
+	password := machineProviderConfig.Ipmi.Password
+
+	c := &goipmi.Connection{
+		Hostname:  hostAddress,
+		Username:  username,
+		Password:  password,
+		Interface: "lanplus",
+	}
+
+	ipmiClient, err := goipmi.NewClient(c)
+
+	if err != nil {
+		glog.Errorf("Error connecting to machine via IPMI: %v", err)
+		return err
+	}
+
+	err = ipmiClient.Open()
+
+	if err != nil {
+		glog.Errorf("Error opening connection to machine via IPMI: %v", err)
+		return err
+	}
+
+	// Turn on machine
+	err = ipmiClient.Control(goipmi.ControlPowerUp)
+
+	if err != nil {
+		glog.Errorf("Error powering-up machine via IPMI: %v", err)
+		return err
+	}
+
+	defer ipmiClient.Close()
 
 	return nil
 }
@@ -81,4 +151,31 @@ func (a *Actuator) getIgnition(signature string) (string, error) {
 	// TODO: Use k8s library to get ignition file path from etcd,
 	// then read actual ignition file from...somewhere?
 	return "{'fake': 'ignition'}", nil
+}
+
+// ProviderConfigMachine gets the machine provider config MachineSetSpec from the
+// specified cluster-api MachineSpec.
+func ProviderConfigMachine(codec codec, ms *machinev1.MachineSpec) (*providerconfigv1.BaremetalMachineProviderSpec, error) {
+	providerSpec := ms.ProviderSpec
+	if providerSpec.Value == nil {
+		return nil, fmt.Errorf("no Value in ProviderConfig")
+	}
+
+	var config providerconfigv1.BaremetalMachineProviderSpec
+	if err := codec.DecodeFromProviderSpec(providerSpec, &config); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
+
+// Set corresponding event based on error. It also returns the original error
+// for convenience, so callers can do "return handleMachineError(...)".
+func (a *Actuator) handleMachineError(machine *machinev1.Machine, err *apierrors.MachineError, eventAction string) error {
+	if eventAction != noEventAction {
+		a.eventRecorder.Eventf(machine, corev1.EventTypeWarning, "Failed"+eventAction, "%v", err.Reason)
+	}
+
+	glog.Errorf("Machine error: %v", err.Message)
+	return err
 }

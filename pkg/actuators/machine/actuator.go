@@ -112,6 +112,7 @@ func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.
 	hostAddress := machineProviderConfig.Ipmi.HostAddress
 	username := machineProviderConfig.Ipmi.Username
 	password := machineProviderConfig.Ipmi.Password
+	bootDevice := machineProviderConfig.Ipmi.BootDevice
 
 	c := &goipmi.Connection{
 		Hostname:  hostAddress,
@@ -134,8 +135,25 @@ func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.
 		return err
 	}
 
+	if bootDevice == "pxe" {
+		err = ipmiClient.SetBootDevice(goipmi.BootDevicePxe)
+
+		if err != nil {
+			glog.Errorf("Error setting machine to PXE boot via IPMI: %v", err)
+			return err
+		}
+	} else {
+		// Otherwise just do remote CD-ROM for now
+		err = ipmiClient.SetBootDevice(goipmi.BootDeviceRemoteCdrom)
+
+		if err != nil {
+			glog.Errorf("Error setting machine to remote CD-ROM boot via IPMI: %v", err)
+			return err
+		}
+	}
+
 	// Turn on machine
-	err = ipmiClient.Control(goipmi.ControlPowerUp)
+	err = ipmiClient.Control(goipmi.ControlPowerCycle)
 
 	if err != nil {
 		glog.Errorf("Error powering-up machine via IPMI: %v", err)

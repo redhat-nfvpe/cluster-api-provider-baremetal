@@ -11,4 +11,5 @@ https://github.com/kubernetes/code-generator/issues/21
 
 Test it:
 
-`go run cmd/baremetal-actuator/main.go create -c examples/cluster.yaml -m examples/machine.yaml`
+1. `sudo yum install -y ipmitool`
+2. `go run cmd/baremetal-actuator/main.go create -c examples/cluster.yaml -m examples/machine.yaml`

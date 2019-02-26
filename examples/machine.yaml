@@ -10,15 +10,15 @@ metadata:
     sigs.k8s.io/cluster-api-machine-role: infra
     sigs.k8s.io/cluster-api-machine-type: worker
 spec:
-  providerConfig:
+  providerSpec:
     value:
       apiVersion: baremetalproviderconfig/v1alpha1
       ignKey: /somewhere/worker.ign
       ipmi:
-        hostAddress: 10.19.110.17
+        hostAddress: 10.19.110.18
         username: ADMIN
         password: ADMIN
-      kind: BaremetalMachineProviderConfig
+      kind: BaremetalMachineProviderSpec
   versions:
     kubelet: ""
     controlPlane: ""

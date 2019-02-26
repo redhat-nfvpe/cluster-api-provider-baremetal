@@ -18,10 +18,10 @@ spec:
       ignition:
         userDataSecret: master-user-data
       ipmi:
-        hostAddress: 10.19.110.17
+        hostAddress: 10.19.110.18
         username: ADMIN
         password: ADMIN
-      kind: LibvirtMachineProviderConfig
+      kind: BaremetalMachineProviderSpec
   versions:
     kubelet: ""
 status: {}

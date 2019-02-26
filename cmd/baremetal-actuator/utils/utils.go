@@ -7,9 +7,11 @@ import (
 	apiv1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 
+	"github.com/ghodss/yaml"
+	"github.com/golang/glog"
 	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
 	machineactuator "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/actuators/machine"
-	yaml "gopkg.in/yaml.v2"
+	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalproviderconfig/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	kubernetesfake "k8s.io/client-go/kubernetes/fake"
 	"k8s.io/client-go/tools/record"
@@ -24,8 +26,14 @@ func CreateActuator(machine *machinev1.Machine, userData *apiv1.Secret) *machine
 	fakeClient := fake.NewFakeClient(objList...)
 	fakeKubeClient := kubernetesfake.NewSimpleClientset(objList...)
 
+	codec, err := v1alpha1.NewCodec()
+	if err != nil {
+		glog.Fatal(err)
+	}
+
 	params := machineactuator.ActuatorParams{
 		Client:              fakeClient,
+		Codec:               codec,
 		KubeClient:          fakeKubeClient,
 		EventRecorder:       &record.FakeRecorder{},
 		ServerListenAddress: "localhost:8081",

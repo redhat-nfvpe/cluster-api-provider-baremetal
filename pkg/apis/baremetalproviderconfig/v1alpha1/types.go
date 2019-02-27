@@ -18,12 +18,20 @@ type BaremetalMachineProviderSpec struct {
 	Ipmi *Ipmi `json:"ipmi"`
 }
 
-// Ipmi contains the info for the actuator to start the actual baremetal machine
+// Image contains the info for the actuator to know what OS to place (and
+// how to place it) on the actual baremetal machine
+// type Image struct {
+// 	Type string `json:"type"`
+
+// }
+
+// Ipmi contains the info for the actuator to control the actual baremetal machine
 type Ipmi struct {
 	HostAddress string `json:"hostAddress"`
 	// FIXME: store these as a secret?
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	BootDevice string `json:"bootDevice"`
 }
 
 // BaremetalMachineProviderStatus is the type that will be embedded in a Machine.Status.ProviderStatus field.

@@ -2,10 +2,9 @@ package main
 
 import (
 	clusterapis "github.com/openshift/cluster-api/pkg/apis"
+	"github.com/openshift/cluster-api/pkg/controller/machine"
 	machineactuator "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/actuators/machine"
-	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis"
 	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalproviderconfig/v1alpha1"
-	"github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/controller"
 	"k8s.io/client-go/kubernetes"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
@@ -13,6 +12,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/runtime/signals"
 
 	"flag"
+	"fmt"
 
 	"github.com/golang/glog"
 	"k8s.io/klog"
@@ -45,17 +45,16 @@ func main() {
 	glog.Infof("Registering Components.")
 
 	// Setup Scheme for all resources
-	if err := apis.AddToScheme(mgr.GetScheme()); err != nil {
-		glog.Fatal(err)
-	}
-
 	if err := clusterapis.AddToScheme(mgr.GetScheme()); err != nil {
 		glog.Fatal(err)
 	}
 
-	initActuator(mgr)
-	// Setup all Controllers
-	if err := controller.AddToManager(mgr); err != nil {
+	machineActuator, err := initActuator(mgr)
+	if err != nil {
+		glog.Fatal(err)
+	}
+
+	if err := machine.AddWithActuator(mgr, machineActuator); err != nil {
 		glog.Fatal(err)
 	}
 
@@ -65,30 +64,30 @@ func main() {
 	glog.Fatal(mgr.Start(signals.SetupSignalHandler()))
 }
 
-func initActuator(m manager.Manager) (*machineactuator.Actuator, error) {
-	config := m.GetConfig()
+func initActuator(mgr manager.Manager) (*machineactuator.Actuator, error) {
+	codec, err := v1alpha1.NewCodec()
+	if err != nil {
+		return nil, fmt.Errorf("unable to create codec: %v", err)
+	}
+
+	config := mgr.GetConfig()
 	kubeClient, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		glog.Fatalf("Could not create kubernetes client to talk to the apiserver: %v", err)
 	}
 
-	codec, err := v1alpha1.NewCodec()
-	if err != nil {
-		glog.Fatal(err)
-	}
-
 	params := machineactuator.ActuatorParams{
-		Client:              m.GetClient(),
+		Client:              mgr.GetClient(),
 		Codec:               codec,
 		KubeClient:          kubeClient,
-		EventRecorder:       m.GetRecorder("baremetal-controller"),
+		EventRecorder:       mgr.GetRecorder("baremetal-controller"),
 		ServerListenAddress: "localhost:8081",
 	}
 
-	machineactuator.MachineActuator, err = machineactuator.NewActuator(params)
+	actuator, err := machineactuator.NewActuator(params)
 	if err != nil {
-		glog.Fatalf("Could not create Baremetal machine actuator: %v", err)
+		return nil, fmt.Errorf("could not create AWS machine actuator: %v", err)
 	}
 
-	return machineactuator.MachineActuator, nil
+	return actuator, nil
 }

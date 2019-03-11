@@ -197,3 +197,18 @@ func (a *Actuator) handleMachineError(machine *machinev1.Machine, err *apierrors
 	glog.Errorf("Machine error: %v", err.Message)
 	return err
 }
+
+// Delete : empty method
+func (a *Actuator) Delete(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
+	return nil
+}
+
+// Update : empty method
+func (a *Actuator) Update(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
+	return nil
+}
+
+// Exists : empty method
+func (a *Actuator) Exists(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) (bool, error) {
+	return false, nil
+}

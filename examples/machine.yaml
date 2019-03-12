@@ -18,7 +18,7 @@ spec:
         hostAddress: 10.19.110.18
         username: ADMIN
         password: ADMIN
-        bootDevice: cdrom
+        bootDevice: pxe
       kind: BaremetalMachineProviderSpec
   versions:
     kubelet: ""

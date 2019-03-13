@@ -152,12 +152,17 @@ func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.
 		}
 	}
 
-	// Turn on machine
+	// Power cycle machine
 	err = ipmiClient.Control(goipmi.ControlPowerCycle)
 
 	if err != nil {
-		glog.Errorf("Error powering-up machine via IPMI: %v", err)
-		return err
+		// Try just powering-up instead
+		err = ipmiClient.Control(goipmi.ControlPowerUp)
+
+		if err != nil {
+			glog.Errorf("Error powering-up machine via IPMI: %v", err)
+			return err
+		}
 	}
 
 	defer ipmiClient.Close()

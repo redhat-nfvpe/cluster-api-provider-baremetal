@@ -38,11 +38,11 @@ var MachineActuator *Actuator
 
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
-	client          client.Client
-	kubeClient      kubernetes.Interface
-	eventRecorder   record.EventRecorder
-	codec           codec
-	baremetalServer server.BaremetalServer
+	client             client.Client
+	kubeClient         kubernetes.Interface
+	eventRecorder      record.EventRecorder
+	codec              codec
+	baremetalAPIServer *server.APIServer
 }
 
 type codec interface {
@@ -70,14 +70,12 @@ func NewActuator(params ActuatorParams) (*Actuator, error) {
 		eventRecorder: params.EventRecorder,
 	}
 
-	baremetalServerParams := server.BaremetalServerParams{
-		ListenAddress:   params.ServerListenAddress,
-		GetIgnitionFunc: actuator.getIgnition,
-	}
-
 	var err error
 
-	actuator.baremetalServer, err = server.NewBaremetalServer(baremetalServerParams)
+	bms := server.BaremetalServer{}
+	handler := server.NewServerAPIHandler(bms)
+
+	actuator.baremetalAPIServer = server.NewAPIServer(handler, 8081, true, "TODO", "TODO")
 
 	return actuator, err
 }

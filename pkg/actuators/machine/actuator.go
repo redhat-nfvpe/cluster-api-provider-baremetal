@@ -205,6 +205,60 @@ func (a *Actuator) handleMachineError(machine *machinev1.Machine, err *apierrors
 
 // Delete : empty method
 func (a *Actuator) Delete(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
+	glog.Infof("Deleting machine %q for cluster %q.", machine.Name, cluster.Name)
+
+	err := a.DeleteMachine(cluster, machine)
+
+	if err != nil {
+		return errors.Errorf("failed to delete machine: %+v", err)
+	}
+
+	return nil
+}
+
+// DeleteMachine should extract data from etc and power off the target machine via goimpi
+func (a *Actuator) DeleteMachine(cluster *machinev1.Cluster, machine *machinev1.Machine) error {
+
+	machineProviderConfig, err := ProviderConfigMachine(a.codec, &machine.Spec)
+	if err != nil {
+		return a.handleMachineError(machine, apierrors.InvalidMachineConfiguration("error getting machineProviderConfig from spec: %v", err), createEventAction)
+	}
+
+	hostAddress := machineProviderConfig.Ipmi.HostAddress
+	username := machineProviderConfig.Ipmi.Username
+	password := machineProviderConfig.Ipmi.Password
+
+	c := &goipmi.Connection{
+		Hostname:  hostAddress,
+		Username:  username,
+		Password:  password,
+		Interface: "lanplus",
+	}
+
+	ipmiClient, err := goipmi.NewClient(c)
+
+	if err != nil {
+		glog.Errorf("Error connecting to machine via IPMI: %v", err)
+		return err
+	}
+
+	err = ipmiClient.Open()
+
+	if err != nil {
+		glog.Errorf("Error opening connection to machine via IPMI: %v", err)
+		return err
+	}
+
+	// Power off machine
+	err = ipmiClient.Control(goipmi.ControlPowerDown)
+
+	if err != nil {
+		glog.Errorf("Error powering off machine via IPMI: %v", err)
+		return err
+	}
+
+	defer ipmiClient.Close()
+
 	return nil
 }
 

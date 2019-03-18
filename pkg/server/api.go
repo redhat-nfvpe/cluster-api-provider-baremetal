@@ -21,6 +21,8 @@ type APIHandler struct {
 }
 
 type healthHandler struct{}
+
+// defaultHandler is the HTTP Handler for backstopping invalid requests.
 type defaultHandler struct{}
 
 func NewAPIServer(a *APIHandler, p int, is bool, c, k string) *APIServer {
@@ -44,6 +46,8 @@ func NewServerAPIHandler(s BaremetalServer) *APIHandler {
 	}
 }
 
+// ServeHTTP handles the requests for the machine config server
+// API handler.
 func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet && r.Method != http.MethodHead {
 		w.Header().Set("Content-Length", "0")
@@ -94,6 +98,7 @@ func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// ServeHTTP handles /healthz requests.
 func (h *healthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Length", "0")
 	if r.Method == http.MethodGet || r.Method == http.MethodHead {
@@ -105,6 +110,7 @@ func (h *healthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// ServeHTTP handles invalid requests.
 func (h *defaultHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Length", "0")
 	if r.Method == http.MethodGet || r.Method == http.MethodHead {

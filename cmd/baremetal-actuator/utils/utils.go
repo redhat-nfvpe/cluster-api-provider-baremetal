@@ -32,11 +32,10 @@ func CreateActuator(machine *machinev1.Machine, userData *apiv1.Secret) *machine
 	}
 
 	params := machineactuator.ActuatorParams{
-		Client:              fakeClient,
-		Codec:               codec,
-		KubeClient:          fakeKubeClient,
-		EventRecorder:       &record.FakeRecorder{},
-		ServerListenAddress: "localhost:8081",
+		Client:        fakeClient,
+		Codec:         codec,
+		KubeClient:    fakeKubeClient,
+		EventRecorder: &record.FakeRecorder{},
 	}
 
 	actuator, _ := machineactuator.NewActuator(params)

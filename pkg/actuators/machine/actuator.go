@@ -38,11 +38,12 @@ var MachineActuator *Actuator
 
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
-	client             client.Client
-	kubeClient         kubernetes.Interface
-	eventRecorder      record.EventRecorder
-	codec              codec
-	baremetalAPIServer *server.APIServer
+	client                     client.Client
+	kubeClient                 kubernetes.Interface
+	eventRecorder              record.EventRecorder
+	codec                      codec
+	baremetalAPIServerInsecure *server.APIServer
+	baremetalAPIServerSecure   *server.APIServer
 }
 
 type codec interface {
@@ -53,11 +54,10 @@ type codec interface {
 
 // ActuatorParams holds parameter information for Actuator
 type ActuatorParams struct {
-	Client              client.Client
-	Codec               codec
-	KubeClient          kubernetes.Interface
-	EventRecorder       record.EventRecorder
-	ServerListenAddress string
+	Client        client.Client
+	Codec         codec
+	KubeClient    kubernetes.Interface
+	EventRecorder record.EventRecorder
 }
 
 // NewActuator creates a new Actuator
@@ -75,7 +75,11 @@ func NewActuator(params ActuatorParams) (*Actuator, error) {
 	bms := server.BaremetalServer{}
 	handler := server.NewServerAPIHandler(bms)
 
-	actuator.baremetalAPIServer = server.NewAPIServer(handler, 8081, true, "TODO", "TODO")
+	// FIXME: insecure only, for now
+	actuator.baremetalAPIServerInsecure = server.NewAPIServer(handler, 8081, true, "TODO", "TODO")
+
+	go actuator.baremetalAPIServerInsecure.Serve()
+	// go actuator.baremetalAPIServerSecure.Serve()
 
 	return actuator, err
 }

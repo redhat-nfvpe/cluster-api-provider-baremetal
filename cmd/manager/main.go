@@ -77,11 +77,10 @@ func initActuator(mgr manager.Manager) (*machineactuator.Actuator, error) {
 	}
 
 	params := machineactuator.ActuatorParams{
-		Client:              mgr.GetClient(),
-		Codec:               codec,
-		KubeClient:          kubeClient,
-		EventRecorder:       mgr.GetRecorder("baremetal-controller"),
-		ServerListenAddress: "localhost:8081",
+		Client:        mgr.GetClient(),
+		Codec:         codec,
+		KubeClient:    kubeClient,
+		EventRecorder: mgr.GetRecorder("baremetal-controller"),
 	}
 
 	actuator, err := machineactuator.NewActuator(params)

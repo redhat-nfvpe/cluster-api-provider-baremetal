@@ -46,6 +46,26 @@ func NewServerAPIHandler(s BaremetalServer) *APIHandler {
 	}
 }
 
+// Serve launches the API Server.
+func (a *APIServer) Serve() {
+	bmas := &http.Server{
+		Addr:    fmt.Sprintf(":%v", a.port),
+		Handler: a.handler,
+	}
+
+	glog.Info("launching server")
+	if a.insecure {
+		// Serve a non TLS server.
+		if err := bmas.ListenAndServe(); err != http.ErrServerClosed {
+			glog.Exitf("Baremetal Actuator API Server exited with error: %v", err)
+		}
+	} else {
+		if err := bmas.ListenAndServeTLS(a.cert, a.key); err != http.ErrServerClosed {
+			glog.Exitf("Baremetal Actuator API Server exited with error: %v", err)
+		}
+	}
+}
+
 // ServeHTTP handles the requests for the machine config server
 // API handler.
 func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

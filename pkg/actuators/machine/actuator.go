@@ -16,6 +16,7 @@ package machine
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/golang/glog"
 	"github.com/pkg/errors"
@@ -84,6 +85,13 @@ const (
 	createEventAction = "Create"
 	deleteEventAction = "Delete"
 	noEventAction     = ""
+)
+
+const (
+	powerOnState    = "Powering on"
+	powerOffState   = "Powering off"
+	provioningState = "Provisioning"
+	runningState    = "Running"
 )
 
 // Create creates a machine and is invoked by the Machine Controller
@@ -157,11 +165,16 @@ func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.
 		// Try just powering-up instead
 		err = ipmiClient.Control(goipmi.ControlPowerUp)
 
+		a.updateStatus(machine, powerOnState)
+
 		if err != nil {
 			glog.Errorf("Error powering-up machine via IPMI: %v", err)
 			return err
 		}
 	}
+
+	time.Sleep(10 * time.Second)
+	a.updateStatus(machine, provioningState)
 
 	defer ipmiClient.Close()
 
@@ -250,6 +263,9 @@ func (a *Actuator) DeleteMachine(cluster *machinev1.Cluster, machine *machinev1.
 	// Power off machine
 	err = ipmiClient.Control(goipmi.ControlPowerDown)
 
+	a.updateStatus(machine, powerOffState)
+	time.Sleep(10 * time.Second)
+
 	if err != nil {
 		glog.Errorf("Error powering off machine via IPMI: %v", err)
 		return err
@@ -268,4 +284,50 @@ func (a *Actuator) Update(context context.Context, cluster *machinev1.Cluster, m
 // Exists : empty method
 func (a *Actuator) Exists(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) (bool, error) {
 	return false, nil
+}
+
+// updateStatus updates a machine object's status.
+func (a *Actuator) updateStatus(machine *machinev1.Machine, state string) error {
+	glog.Infof("Updating status for %s", machine.Name)
+
+	status, err := ProviderStatusFromMachine(a.codec, machine)
+	if err != nil {
+		glog.Errorf("Unable to get provider status from machine: %v", err)
+		return err
+	}
+
+	// Update the libvirt provider status in-place.
+	if err := UpdateProviderStatus(status, state); err != nil {
+		glog.Errorf("Unable to update provider status: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+// UpdateProviderStatus updates the provider status in-place
+func UpdateProviderStatus(status *providerconfigv1.BaremetalMachineProviderStatus, state string) error {
+
+	status.Status = state
+
+	return nil
+}
+
+// EncodeProviderStatus encodes a libvirt provider
+// status as a runtime.RawExtension for inclusion in a MachineStatus
+// object.
+func EncodeProviderStatus(codec codec, status *providerconfigv1.BaremetalMachineProviderStatus) (*runtime.RawExtension, error) {
+	return codec.EncodeProviderStatus(status)
+}
+
+// ProviderStatusFromMachine deserializes a libvirt provider status
+// from a machine object.
+func ProviderStatusFromMachine(codec codec, machine *machinev1.Machine) (*providerconfigv1.BaremetalMachineProviderStatus, error) {
+	status := &providerconfigv1.BaremetalMachineProviderStatus{}
+	var err error
+	if machine.Status.ProviderStatus != nil {
+		err = codec.DecodeProviderStatus(machine.Status.ProviderStatus, status)
+	}
+
+	return status, err
 }

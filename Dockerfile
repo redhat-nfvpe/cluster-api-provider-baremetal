@@ -5,6 +5,7 @@ RUN go build -o ./machine-controller-manager ./cmd/manager
 RUN go build -o ./manager ./vendor/github.com/openshift/cluster-api/cmd/manager
 
 FROM registry.svc.ci.openshift.org/openshift/origin-v4.0:base
+RUN echo "nameserver 10.10.160.1" >> /etc/resolv.conf
 RUN INSTALL_PKGS=" \
       ipmitool \
       " && \

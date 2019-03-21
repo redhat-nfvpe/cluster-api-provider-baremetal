@@ -21,6 +21,8 @@ import (
 	"github.com/golang/glog"
 	"github.com/pkg/errors"
 	server "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/server"
+	"k8s.io/apimachinery/pkg/api/equality"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
@@ -300,10 +302,49 @@ func (a *Actuator) updateStatus(machine *machinev1.Machine, state string) error 
 		return err
 	}
 
-	// Update the libvirt provider status in-place.
+	// Update the baremetal provider status in-place.
 	if err := UpdateProviderStatus(status, state); err != nil {
 		glog.Errorf("Unable to update provider status: %v", err)
 		return err
+	}
+
+	// Call client to update status
+	if err := a.updateMachineStatus(machine, status); err != nil {
+		glog.Errorf("error updating machine status: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+// updateMachineStatus calls k8s API to update a machine object's status.
+func (a *Actuator) updateMachineStatus(machine *machinev1.Machine, status *providerconfigv1.BaremetalMachineProviderStatus) error {
+	statusRaw, err := a.codec.EncodeProviderStatus(status)
+	if err != nil {
+		glog.Errorf("error encoding Baremetal provider status: %v", err)
+		return err
+	}
+
+	machineCopy := machine.DeepCopy()
+	machineCopy.Status.ProviderStatus = statusRaw
+
+	oldStatus := &providerconfigv1.BaremetalMachineProviderStatus{}
+	if err := a.codec.DecodeProviderStatus(machine.Status.ProviderStatus, oldStatus); err != nil {
+		glog.Errorf("error updating machine status: %v", err)
+		return err
+	}
+
+	if !equality.Semantic.DeepEqual(status, oldStatus) {
+		glog.Infof("machine status has changed, updating")
+		time := metav1.Now()
+		machineCopy.Status.LastUpdated = &time
+
+		if err := a.client.Status().Update(context.Background(), machineCopy); err != nil {
+			glog.Errorf("error updating machine status: %v", err)
+			return err
+		}
+	} else {
+		glog.Info("status unchanged")
 	}
 
 	return nil
@@ -317,14 +358,14 @@ func UpdateProviderStatus(status *providerconfigv1.BaremetalMachineProviderStatu
 	return nil
 }
 
-// EncodeProviderStatus encodes a libvirt provider
+// EncodeProviderStatus encodes a baremetal provider
 // status as a runtime.RawExtension for inclusion in a MachineStatus
 // object.
 func EncodeProviderStatus(codec codec, status *providerconfigv1.BaremetalMachineProviderStatus) (*runtime.RawExtension, error) {
 	return codec.EncodeProviderStatus(status)
 }
 
-// ProviderStatusFromMachine deserializes a libvirt provider status
+// ProviderStatusFromMachine deserializes a baremetal provider status
 // from a machine object.
 func ProviderStatusFromMachine(codec codec, machine *machinev1.Machine) (*providerconfigv1.BaremetalMachineProviderStatus, error) {
 	status := &providerconfigv1.BaremetalMachineProviderStatus{}

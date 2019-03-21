@@ -62,3 +62,7 @@ type BaremetalClusterProviderStatus struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 }
+
+func init() {
+	SchemeBuilder.Register(&BaremetalMachineProviderSpec{}, &BaremetalMachineProviderSpecList{}, &BaremetalMachineProviderStatus{})
+}

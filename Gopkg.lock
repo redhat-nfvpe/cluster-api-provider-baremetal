@@ -83,6 +83,12 @@
   version = "v0.18.0"
 
 [[projects]]
+  name = "github.com/gobuffalo/envy"
+  packages = ["."]
+  revision = "fa0dfdc10b5366ce365b7d9d1755a03e4e797bc5"
+  version = "v1.6.15"
+
+[[projects]]
   name = "github.com/gogo/protobuf"
   packages = [
     "proto",
@@ -186,6 +192,12 @@
   version = "v1.0"
 
 [[projects]]
+  name = "github.com/joho/godotenv"
+  packages = ["."]
+  revision = "23d116af351c84513e1946b527c88823e476be13"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/json-iterator/go"
   packages = ["."]
   revision = "0ff49de124c6f76f8494e194af75bde0f1a49a29"
@@ -200,6 +212,12 @@
     "jwriter"
   ]
   revision = "1de009706dbeb9d05f18586f0735fcdb7c524481"
+
+[[projects]]
+  name = "github.com/markbates/inflect"
+  packages = ["."]
+  revision = "24b83195037b3bc61fcda2d28b7b0518bce293b6"
+  version = "v1.0.4"
 
 [[projects]]
   branch = "master"
@@ -270,6 +288,12 @@
   version = "v1.5.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/openshift/api"
+  packages = ["config/v1"]
+  revision = "963e1402ed59e6843598ca035cfdd243d01b49e0"
+
+[[projects]]
   name = "github.com/openshift/cluster-api"
   packages = [
     "pkg/apis",
@@ -285,6 +309,8 @@
     "pkg/client/clientset_generated/clientset/typed/machine/v1beta1/fake",
     "pkg/controller/error",
     "pkg/controller/machine",
+    "pkg/controller/node",
+    "pkg/controller/noderefutil",
     "pkg/errors",
     "pkg/util"
   ]
@@ -294,7 +320,10 @@
   branch = "master"
   name = "github.com/openshift/cluster-api-actuator-pkg"
   packages = [
+    "pkg/e2e/autoscaler",
     "pkg/e2e/framework",
+    "pkg/e2e/infra",
+    "pkg/e2e/operators",
     "pkg/manifests",
     "pkg/types"
   ]
@@ -303,8 +332,17 @@
 [[projects]]
   branch = "master"
   name = "github.com/openshift/cluster-autoscaler-operator"
-  packages = ["pkg/apis/autoscaling/v1alpha1"]
+  packages = [
+    "pkg/apis",
+    "pkg/apis/autoscaling/v1alpha1"
+  ]
   revision = "54672e5e562be1c55db424a744da445fc715f7b3"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/openshift/library-go"
+  packages = ["pkg/config/clusteroperator/v1helpers"]
+  revision = "fc4b2d5cbcf0ab855422e340c78fe7a53a38bee3"
 
 [[projects]]
   name = "github.com/openshift/machine-api-operator"
@@ -379,6 +417,25 @@
     "xfs"
   ]
   revision = "40f3c57fb1983891f95378042bd0bfd590f52384"
+
+[[projects]]
+  name = "github.com/rogpeppe/go-internal"
+  packages = [
+    "modfile",
+    "module",
+    "semver"
+  ]
+  revision = "1cf9852c553c5b7da2d5a4a091129a7822fed0c9"
+  version = "v1.2.2"
+
+[[projects]]
+  name = "github.com/spf13/afero"
+  packages = [
+    ".",
+    "mem"
+  ]
+  revision = "f4711e4db9e9a1d3887343acb72b2bbfc2f686f5"
+  version = "v1.2.1"
 
 [[projects]]
   name = "github.com/spf13/cobra"
@@ -761,6 +818,14 @@
     "rest",
     "rest/watch",
     "restmapper",
+    "scale",
+    "scale/scheme",
+    "scale/scheme/appsint",
+    "scale/scheme/appsv1beta1",
+    "scale/scheme/appsv1beta2",
+    "scale/scheme/autoscalingv1",
+    "scale/scheme/extensionsint",
+    "scale/scheme/extensionsv1beta1",
     "testing",
     "third_party/forked/golang/template",
     "tools/auth",
@@ -829,6 +894,12 @@
   revision = "5e45bb682580c9be5ffa4d27d367f0eeba125c7b"
 
 [[projects]]
+  branch = "master"
+  name = "k8s.io/utils"
+  packages = ["pointer"]
+  revision = "21c4ce38f2a793ec01e925ddc31216500183b773"
+
+[[projects]]
   name = "sigs.k8s.io/cluster-api"
   packages = [
     "pkg/apis/cluster/common",
@@ -865,11 +936,33 @@
     "pkg/runtime/signals",
     "pkg/source",
     "pkg/source/internal",
+    "pkg/webhook",
     "pkg/webhook/admission",
     "pkg/webhook/admission/types",
+    "pkg/webhook/internal/cert",
+    "pkg/webhook/internal/cert/generator",
+    "pkg/webhook/internal/cert/writer",
+    "pkg/webhook/internal/cert/writer/atomic",
     "pkg/webhook/types"
   ]
   revision = "c63ebda0bf4be5f0a8abd4003e4ea546032545ba"
+
+[[projects]]
+  name = "sigs.k8s.io/controller-tools"
+  packages = [
+    "cmd/controller-gen",
+    "pkg/crd/generator",
+    "pkg/crd/util",
+    "pkg/internal/codegen",
+    "pkg/internal/codegen/parse",
+    "pkg/internal/general",
+    "pkg/rbac",
+    "pkg/util",
+    "pkg/webhook",
+    "pkg/webhook/internal"
+  ]
+  revision = "fbf141159251d035089e7acdd5a343f8cec91b94"
+  version = "v0.1.9"
 
 [[projects]]
   name = "sigs.k8s.io/yaml"
@@ -880,6 +973,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "80e871837cdddd1449af4d5196912a35c31c20c4cb0b958b36364e161c61cf8c"
+  inputs-digest = "82b897b7e1344346b744b5cab1eba5387965ec953ac8dbd96d62e02841d3b0aa"
   solver-name = "gps-cdcl"
   solver-version = 1

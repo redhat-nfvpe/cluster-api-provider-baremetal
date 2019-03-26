@@ -184,6 +184,8 @@ func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.
 
 	defer ipmiClient.Close()
 
+	a.eventRecorder.Eventf(machine, corev1.EventTypeNormal, "Created", "Created Machine %v", machine.Name)
+
 	return nil
 }
 
@@ -296,17 +298,15 @@ func (a *Actuator) Exists(context context.Context, cluster *machinev1.Cluster, m
 func (a *Actuator) updateStatus(machine *machinev1.Machine, state string) error {
 	glog.Infof("Updating status for %s", machine.Name)
 
-	status, err := ProviderStatusFromMachine(a.codec, machine)
-	if err != nil {
-		glog.Errorf("Unable to get provider status from machine: %v", err)
+	// Starting with a fresh status as we assume full control of it here.
+	status := &providerconfigv1.BaremetalMachineProviderStatus{}
+	if err := a.codec.DecodeProviderStatus(machine.Status.ProviderStatus, status); err != nil {
+		glog.Errorf("Error decoding machine provider status: %v", err)
 		return err
 	}
 
 	// Update the baremetal provider status in-place.
-	if err := UpdateProviderStatus(status, state); err != nil {
-		glog.Errorf("Unable to update provider status: %v", err)
-		return err
-	}
+	status.Status = &state
 
 	// Call client to update status
 	if err := a.updateMachineStatus(machine, status); err != nil {
@@ -348,31 +348,4 @@ func (a *Actuator) updateMachineStatus(machine *machinev1.Machine, status *provi
 	}
 
 	return nil
-}
-
-// UpdateProviderStatus updates the provider status in-place
-func UpdateProviderStatus(status *providerconfigv1.BaremetalMachineProviderStatus, state string) error {
-
-	status.Status = state
-
-	return nil
-}
-
-// EncodeProviderStatus encodes a baremetal provider
-// status as a runtime.RawExtension for inclusion in a MachineStatus
-// object.
-func EncodeProviderStatus(codec codec, status *providerconfigv1.BaremetalMachineProviderStatus) (*runtime.RawExtension, error) {
-	return codec.EncodeProviderStatus(status)
-}
-
-// ProviderStatusFromMachine deserializes a baremetal provider status
-// from a machine object.
-func ProviderStatusFromMachine(codec codec, machine *machinev1.Machine) (*providerconfigv1.BaremetalMachineProviderStatus, error) {
-	status := &providerconfigv1.BaremetalMachineProviderStatus{}
-	var err error
-	if machine.Status.ProviderStatus != nil {
-		err = codec.DecodeProviderStatus(machine.Status.ProviderStatus, status)
-	}
-
-	return status, err
 }

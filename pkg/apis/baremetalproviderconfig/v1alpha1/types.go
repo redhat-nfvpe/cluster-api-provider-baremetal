@@ -39,7 +39,7 @@ type Ipmi struct {
 type BaremetalMachineProviderStatus struct {
 	metav1.TypeMeta `json:",inline"`
 
-	Status string `json:"status"`
+	Status *string `json:"status"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

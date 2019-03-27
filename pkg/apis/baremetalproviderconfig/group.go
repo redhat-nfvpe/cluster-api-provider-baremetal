@@ -1,3 +1,3 @@
 package baremetalproviderconfig
 
-const GroupName = "baremetalproviderconfig.k8s.io"
+const GroupName = "baremetalproviderconfig.openshift.io"

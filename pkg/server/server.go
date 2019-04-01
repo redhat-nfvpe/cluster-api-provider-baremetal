@@ -7,12 +7,12 @@ type BaremetalIntrospectionData struct {
 }
 
 type BaremetalConfig struct {
-	url string
+	Url string `json:"url"`
 }
 
 type BaremetalServer struct {
 }
 
 func (bms *BaremetalServer) GetConfigUrl(data BaremetalIntrospectionData) (*BaremetalConfig, error) {
-	return &BaremetalConfig{url: "TODO"}, nil
+	return &BaremetalConfig{Url: "TODO"}, nil
 }

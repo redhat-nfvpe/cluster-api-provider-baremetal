@@ -91,7 +91,7 @@ func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if conf == nil || err != nil {
+	if conf == nil {
 		w.Header().Set("Content-Length", "0")
 		w.WriteHeader(http.StatusNotFound)
 		return

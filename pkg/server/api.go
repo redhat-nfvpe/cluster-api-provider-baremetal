@@ -17,7 +17,7 @@ type APIServer struct {
 }
 
 type APIHandler struct {
-	server BaremetalServer
+	server *BaremetalServer
 }
 
 type healthHandler struct{}
@@ -40,7 +40,7 @@ func NewAPIServer(a *APIHandler, p int, is bool, c, k string) *APIServer {
 	}
 }
 
-func NewServerAPIHandler(s BaremetalServer) *APIHandler {
+func NewServerAPIHandler(s *BaremetalServer) *APIHandler {
 	return &APIHandler{
 		server: s,
 	}

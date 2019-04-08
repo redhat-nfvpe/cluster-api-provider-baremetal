@@ -78,6 +78,7 @@ var map_OperatorSpec = map[string]string{
 	"":                           "OperatorSpec contains common fields operators need.  It is intended to be anonymous included inside of the Spec struct for your particular operator.",
 	"managementState":            "managementState indicates whether and how the operator should manage the component",
 	"logLevel":                   "logLevel is an intent based logging for an overall component.  It does not give fine grained control, but it is a simple way to manage coarse grained logging choices that operators have to interpret for their operands.",
+	"operatorLogLevel":           "operatorLogLevel is an intent based logging for the operator itself.  It does not give fine grained control, but it is a simple way to manage coarse grained logging choices that operators have to interpret for themselves.",
 	"operandSpecs":               "operandSpecs provide customization for functional units within the component",
 	"unsupportedConfigOverrides": "unsupportedConfigOverrides holds a sparse config that will override any previously set options.  It only needs to be the fields to override it will end up overlaying in the following order: 1. hardcoded defaults 2. observedConfig 3. unsupportedConfigOverrides",
 	"observedConfig":             "observedConfig holds a sparse config that controller has observed from the cluster state.  It exists in spec because it is an input to the level for the operator",
@@ -172,19 +173,6 @@ func (DNS) SwaggerDoc() map[string]string {
 	return map_DNS
 }
 
-var map_DNSCondition = map[string]string{
-	"":                   "DNSCondition contains details for the current condition of this DNS.",
-	"type":               "type is the type of the condition.\n\nThese are the supported DNS condition types:\n\n  * Available\n  - True if the following conditions are met:\n    * DNS controller daemonset is available.\n  - False if any of those conditions are unsatisfied.",
-	"status":             "status is the status of the condition. Can be True, False, Unknown.",
-	"lastTransitionTime": "lastTransitionTime is the last time a condition status transitioned from one state to another.",
-	"reason":             "reason is a brief machine readable explanation for the condition's last transition.",
-	"message":            "message is a human readable description of the details of the last transition, complementing reason.",
-}
-
-func (DNSCondition) SwaggerDoc() map[string]string {
-	return map_DNSCondition
-}
-
 var map_DNSList = map[string]string{
 	"": "DNSList contains a list of DNS",
 }
@@ -205,7 +193,7 @@ var map_DNSStatus = map[string]string{
 	"":              "DNSStatus defines the observed status of the DNS.",
 	"clusterIP":     "clusterIP is the service IP through which this DNS is made available.\n\nIn the case of the default DNS, this will be a well known IP that is used as the default nameserver for pods that are using the default ClusterFirst DNS policy.\n\nIn general, this IP can be specified in a pod's spec.dnsConfig.nameservers list or used explicitly when performing name resolution from within the cluster. Example: dig foo.com @<service IP>\n\nMore info: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies",
 	"clusterDomain": "clusterDomain is the local cluster DNS domain suffix for DNS services. This will be a subdomain as defined in RFC 1034, section 3.5: https://tools.ietf.org/html/rfc1034#section-3.5 Example: \"cluster.local\"\n\nMore info: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service",
-	"conditions":    "conditions represent the latest available observations of a DNS's current state.",
+	"conditions":    "conditions provide information about the state of the DNS on the cluster.\n\nThese are the supported DNS conditions:\n\n  * Available\n  - True if the following conditions are met:\n    * DNS controller daemonset is available.\n  - False if any of those conditions are unsatisfied.",
 }
 
 func (DNSStatus) SwaggerDoc() map[string]string {
@@ -296,6 +284,7 @@ func (IngressControllerStatus) SwaggerDoc() map[string]string {
 var map_NodePlacement = map[string]string{
 	"":             "NodePlacement describes node scheduling configuration for an ingress controller.",
 	"nodeSelector": "nodeSelector is the node selector applied to ingress controller deployments.\n\nIf unset, the default is:\n\n  beta.kubernetes.io/os: linux\n  node-role.kubernetes.io/worker: ''\n\nIf set, the specified selector is used and replaces the default.",
+	"tolerations":  "tolerations is a list of tolerations applied to ingress controller deployments.\n\nThe default is an empty list.\n\nSee https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/",
 }
 
 func (NodePlacement) SwaggerDoc() map[string]string {

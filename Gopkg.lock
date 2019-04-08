@@ -4,8 +4,8 @@
 [[projects]]
   name = "cloud.google.com/go"
   packages = ["compute/metadata"]
-  revision = "2fa99f4c25c422525316dcb1fd3d5b94e1944cfd"
-  version = "v0.37.1"
+  revision = "458e1f376a2b44413160b5d301183b65debaa3f6"
+  version = "v0.37.2"
 
 [[projects]]
   name = "github.com/PuerkitoBio/purell"
@@ -43,8 +43,8 @@
     ".",
     "log"
   ]
-  revision = "e64cccdfee8896c036b8a88d560c5e3ae15d904d"
-  version = "v2.9.1"
+  revision = "b9bbc5664f49b6deec52393bd68f39830687a347"
+  version = "v2.9.3"
 
 [[projects]]
   name = "github.com/evanphx/json-patch"
@@ -83,25 +83,25 @@
   name = "github.com/go-openapi/jsonpointer"
   packages = ["."]
   revision = "ef5f0afec364d3b9396b7b77b43dbe26bf1f8004"
-  version = "v0.18.0"
+  version = "v0.19.0"
 
 [[projects]]
   name = "github.com/go-openapi/jsonreference"
   packages = ["."]
   revision = "8483a886a90412cd6858df4ea3483dce9c8e35a3"
-  version = "v0.18.0"
+  version = "v0.19.0"
 
 [[projects]]
   name = "github.com/go-openapi/spec"
   packages = ["."]
-  revision = "5b6cdde3200976e3ecceb2868706ee39b6aff3e4"
-  version = "v0.18.0"
+  revision = "53d776530bf78a11b03a7b52dd8a083086b045e5"
+  version = "v0.19.0"
 
 [[projects]]
   name = "github.com/go-openapi/swag"
   packages = ["."]
-  revision = "1d29f06aebd59ccdf11ae04aa0334ded96e2d909"
-  version = "v0.18.0"
+  revision = "b3e2804c8535ee0d1b89320afd98474d5b8e9e3b"
+  version = "v0.19.0"
 
 [[projects]]
   name = "github.com/gobuffalo/envy"
@@ -143,16 +143,16 @@
   version = "v1.3.1"
 
 [[projects]]
-  branch = "master"
   name = "github.com/google/btree"
   packages = ["."]
   revision = "4030bb1f1f0c35b30ca7009e9ebd06849dd45306"
+  version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
   name = "github.com/google/gofuzz"
   packages = ["."]
-  revision = "24818f796faf91cd76ec7bddd72458fbced7a6c1"
+  revision = "f140a6486e521aad38f5917de355cbf147cc0496"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/google/uuid"
@@ -232,7 +232,7 @@
     "jlexer",
     "jwriter"
   ]
-  revision = "1de009706dbeb9d05f18586f0735fcdb7c524481"
+  revision = "1ea4449da9834f4d333f1cc461c374aea217d249"
 
 [[projects]]
   name = "github.com/markbates/inflect"
@@ -306,7 +306,7 @@
   branch = "master"
   name = "github.com/openshift/api"
   packages = ["config/v1"]
-  revision = "963e1402ed59e6843598ca035cfdd243d01b49e0"
+  revision = "6f2133e69900b57a8da4405801243ce2ee790020"
 
 [[projects]]
   branch = "openshift-4.0-cluster-api-0.0.0-alpha.4"
@@ -343,7 +343,7 @@
     "pkg/manifests",
     "pkg/types"
   ]
-  revision = "8068db1eff95cb259f2d48154499b2f99ac248fb"
+  revision = "acbcbdc39cb8052eaafe69f8faa575e5d991aee4"
 
 [[projects]]
   branch = "master"
@@ -352,7 +352,7 @@
     "pkg/apis",
     "pkg/apis/autoscaling/v1alpha1"
   ]
-  revision = "54672e5e562be1c55db424a744da445fc715f7b3"
+  revision = "3ab71618f96e0553a6b6ade9e6355e99dd300e33"
 
 [[projects]]
   branch = "master"
@@ -364,7 +364,7 @@
   branch = "master"
   name = "github.com/openshift/library-go"
   packages = ["pkg/config/clusteroperator/v1helpers"]
-  revision = "fc4b2d5cbcf0ab855422e340c78fe7a53a38bee3"
+  revision = "0ea07d66ce4fad36d11ad04f78afcf69b9ad3840"
 
 [[projects]]
   name = "github.com/openshift/machine-api-operator"
@@ -431,14 +431,8 @@
 [[projects]]
   branch = "master"
   name = "github.com/prometheus/procfs"
-  packages = [
-    ".",
-    "internal/util",
-    "iostats",
-    "nfs",
-    "xfs"
-  ]
-  revision = "40f3c57fb1983891f95378042bd0bfd590f52384"
+  packages = ["."]
+  revision = "ea9eea63887261e4d8ed8315f4078e88d540c725"
 
 [[projects]]
   name = "github.com/rogpeppe/go-internal"
@@ -447,8 +441,8 @@
     "module",
     "semver"
   ]
-  revision = "1cf9852c553c5b7da2d5a4a091129a7822fed0c9"
-  version = "v1.2.2"
+  revision = "438578804ca6f31be148c27683afc419ce47c06e"
+  version = "v1.3.0"
 
 [[projects]]
   name = "github.com/spf13/afero"
@@ -456,8 +450,8 @@
     ".",
     "mem"
   ]
-  revision = "f4711e4db9e9a1d3887343acb72b2bbfc2f686f5"
-  version = "v1.2.1"
+  revision = "588a75ec4f32903aa5e39a2619ba6a4631e28424"
+  version = "v1.2.2"
 
 [[projects]]
   name = "github.com/spf13/cobra"
@@ -515,7 +509,7 @@
     "ssh",
     "ssh/terminal"
   ]
-  revision = "b7391e95e576cacdcdd422573063bc057239113d"
+  revision = "38d8ce5564a5b71b2e3a00553993f1b9a7ae852f"
 
 [[projects]]
   branch = "master"
@@ -531,7 +525,7 @@
     "http2/hpack",
     "idna"
   ]
-  revision = "1272bf9dcd53ea65c09668fb4c76e65deb740072"
+  revision = "eb5bcb51f2a31c7d5141d810b70815c05d9c9146"
 
 [[projects]]
   branch = "master"
@@ -543,7 +537,7 @@
     "jws",
     "jwt"
   ]
-  revision = "c85d3e98c914e3a33234ad863dcbff5dbc425bb8"
+  revision = "9f3314589c9a9136388751d9adae6b0ed400978a"
 
 [[projects]]
   branch = "master"
@@ -553,7 +547,7 @@
     "unix",
     "windows"
   ]
-  revision = "f7bb7a8bee54210937e93ec56d007d892c1f0580"
+  revision = "4b34438f7a67ee5f45cc6132e2bad873a20324e9"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -601,7 +595,6 @@
   packages = [
     "go/ast/astutil",
     "go/gcexportdata",
-    "go/internal/cgo",
     "go/internal/gcimporter",
     "go/internal/packagesdriver",
     "go/packages",
@@ -612,7 +605,7 @@
     "internal/module",
     "internal/semver"
   ]
-  revision = "36c10c0a621fb2fede4686e8ae7bb1d900735d53"
+  revision = "12dd9f86f35064e818f2474523ed0aacba64399f"
 
 [[projects]]
   name = "google.golang.org/appengine"
@@ -901,7 +894,7 @@
     "parser",
     "types"
   ]
-  revision = "bc9033e9ec9e0cec1552e9af7c079cb878dfc511"
+  revision = "e17681d19d3ac4837a019ece36c2a0ec31ffe985"
 
 [[projects]]
   name = "k8s.io/klog"
@@ -916,7 +909,7 @@
     "pkg/common",
     "pkg/util/proto"
   ]
-  revision = "5e45bb682580c9be5ffa4d27d367f0eeba125c7b"
+  revision = "94e1e7b7574c44c4c0f2007de6fe617e259191f3"
 
 [[projects]]
   branch = "master"
@@ -930,8 +923,8 @@
     "pkg/apis/cluster/common",
     "pkg/apis/cluster/v1alpha1"
   ]
-  revision = "3547f8dd93078c0b0f0b221ee1c2a57f96673081"
-  version = "0.0.0-alpha.4"
+  revision = "29fee0a9ef590af33bbaa167ed17a8be50825679"
+  version = "0.1.0"
 
 [[projects]]
   name = "sigs.k8s.io/controller-runtime"
@@ -961,13 +954,8 @@
     "pkg/runtime/signals",
     "pkg/source",
     "pkg/source/internal",
-    "pkg/webhook",
     "pkg/webhook/admission",
     "pkg/webhook/admission/types",
-    "pkg/webhook/internal/cert",
-    "pkg/webhook/internal/cert/generator",
-    "pkg/webhook/internal/cert/writer",
-    "pkg/webhook/internal/cert/writer/atomic",
     "pkg/webhook/internal/metrics",
     "pkg/webhook/types"
   ]
@@ -984,11 +972,10 @@
     "pkg/internal/general",
     "pkg/rbac",
     "pkg/util",
-    "pkg/webhook",
-    "pkg/webhook/internal"
+    "pkg/webhook"
   ]
-  revision = "fbf141159251d035089e7acdd5a343f8cec91b94"
-  version = "v0.1.9"
+  revision = "b8adde9bc6d7f3fba449d306613a9daed23676c8"
+  version = "v0.1.10"
 
 [[projects]]
   name = "sigs.k8s.io/yaml"

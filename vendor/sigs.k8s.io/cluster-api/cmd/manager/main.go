@@ -17,11 +17,12 @@ limitations under the License.
 package main
 
 import (
-	"log"
-
 	"flag"
+	"log"
+	"time"
 
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	"k8s.io/klog"
 	"sigs.k8s.io/cluster-api/pkg/apis"
 	"sigs.k8s.io/cluster-api/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
@@ -30,6 +31,8 @@ import (
 )
 
 func main() {
+	flag.Set("logtostderr", "true")
+	klog.InitFlags(nil)
 	flag.Parse()
 
 	// Get a config to talk to the apiserver
@@ -39,7 +42,10 @@ func main() {
 	}
 
 	// Create a new Cmd to provide shared dependencies and start components
-	mgr, err := manager.New(cfg, manager.Options{})
+	syncPeriod := 10 * time.Minute
+	mgr, err := manager.New(cfg, manager.Options{
+		SyncPeriod: &syncPeriod,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

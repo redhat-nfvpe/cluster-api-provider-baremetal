@@ -84,7 +84,12 @@ func createCommand() *cobra.Command {
 				return err
 			}
 
-			actuator := utils.CreateActuator(machine, userData)
+			actuator, err := utils.CreateActuator(machine, userData)
+
+			if err != nil {
+				return err
+			}
+
 			err = actuator.Create(context.TODO(), cluster, machine)
 			if err != nil {
 				return err

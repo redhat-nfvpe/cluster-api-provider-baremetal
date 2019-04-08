@@ -30,6 +30,7 @@ import (
 	machinev1 "github.com/openshift/cluster-api/pkg/apis/machine/v1beta1"
 	apierrors "github.com/openshift/cluster-api/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
+	"k8s.io/client-go/rest"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 
 	providerconfigv1 "github.com/redhat-nfvpe/cluster-api-provider-baremetal/pkg/apis/baremetalproviderconfig/v1alpha1"
@@ -42,6 +43,7 @@ var MachineActuator *Actuator
 // Actuator is responsible for performing machine reconciliation
 type Actuator struct {
 	client                     client.Client
+	config                     rest.Config
 	kubeClient                 kubernetes.Interface
 	eventRecorder              record.EventRecorder
 	codec                      codec
@@ -58,6 +60,7 @@ type codec interface {
 // ActuatorParams holds parameter information for Actuator
 type ActuatorParams struct {
 	Client        client.Client
+	Config        rest.Config
 	Codec         codec
 	KubeClient    kubernetes.Interface
 	EventRecorder record.EventRecorder
@@ -68,6 +71,7 @@ func NewActuator(params ActuatorParams) (*Actuator, error) {
 
 	actuator := &Actuator{
 		client:        params.Client,
+		config:        params.Config,
 		codec:         params.Codec,
 		kubeClient:    params.KubeClient,
 		eventRecorder: params.EventRecorder,
@@ -75,7 +79,7 @@ func NewActuator(params ActuatorParams) (*Actuator, error) {
 
 	var err error
 
-	bms := server.BaremetalServer{}
+	bms := server.NewBaremetalServer(actuator.config)
 	handler := server.NewServerAPIHandler(bms)
 
 	// FIXME: insecure only, for now

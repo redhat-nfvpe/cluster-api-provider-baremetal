@@ -78,6 +78,7 @@ func initActuator(mgr manager.Manager) (*machineactuator.Actuator, error) {
 
 	params := machineactuator.ActuatorParams{
 		Client:        mgr.GetClient(),
+		Config:        *config,
 		Codec:         codec,
 		KubeClient:    kubeClient,
 		EventRecorder: mgr.GetRecorder("baremetal-controller"),

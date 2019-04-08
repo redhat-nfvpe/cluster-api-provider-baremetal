@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"k8s.io/client-go/rest"
+
 	apiv1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 
@@ -17,7 +19,7 @@ import (
 	"k8s.io/client-go/tools/record"
 )
 
-func CreateActuator(machine *machinev1.Machine, userData *apiv1.Secret) *machineactuator.Actuator {
+func CreateActuator(machine *machinev1.Machine, userData *apiv1.Secret) (*machineactuator.Actuator, error) {
 	objList := []runtime.Object{}
 	if userData != nil {
 		objList = append(objList, userData)
@@ -31,15 +33,29 @@ func CreateActuator(machine *machinev1.Machine, userData *apiv1.Secret) *machine
 		glog.Fatal(err)
 	}
 
+	// Create a fake config
+	config := rest.Config{
+		Host: "api.test.something.com",
+		TLSClientConfig: rest.TLSClientConfig{
+			ServerName: "https://api.test.something.com:6443",
+		},
+	}
+
 	params := machineactuator.ActuatorParams{
 		Client:        fakeClient,
+		Config:        config,
 		Codec:         codec,
 		KubeClient:    fakeKubeClient,
 		EventRecorder: &record.FakeRecorder{},
 	}
 
-	actuator, _ := machineactuator.NewActuator(params)
-	return actuator
+	actuator, err := machineactuator.NewActuator(params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return actuator, nil
 }
 
 func ReadClusterResources(clusterLoc, machineLoc, userDataLoc string) (*machinev1.Cluster, *machinev1.Machine, *apiv1.Secret, error) {

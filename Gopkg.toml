@@ -65,7 +65,11 @@ required = [
 
 [[override]]
   name = "github.com/openshift/cluster-api"
-  revision = "91fca585a85b163ddfd119fd09c128c9feadddca"
+  branch = "openshift-4.0-cluster-api-0.0.0-alpha.4"
+
+[[override]]
+  name = "github.com/openshift/cluster-api-actuator-pkg"
+  branch = "master"
 
 [[override]]
   name = "k8s.io/code-generator"

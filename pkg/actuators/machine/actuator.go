@@ -193,12 +193,6 @@ func (a *Actuator) CreateMachine(cluster *machinev1.Cluster, machine *machinev1.
 	return nil
 }
 
-func (a *Actuator) getIgnition(signature string) (string, error) {
-	// TODO: Use k8s library to get ignition file path from etcd,
-	// then read actual ignition file from...somewhere?
-	return "{'fake': 'ignition'}", nil
-}
-
 // ProviderConfigMachine gets the machine provider config MachineSetSpec from the
 // specified cluster-api MachineSpec.
 func ProviderConfigMachine(codec codec, ms *machinev1.MachineSpec) (*providerconfigv1.BaremetalMachineProviderSpec, error) {

@@ -295,7 +295,62 @@ func (a *Actuator) Update(context context.Context, cluster *machinev1.Cluster, m
 
 // Exists : empty method
 func (a *Actuator) Exists(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) (bool, error) {
-	return false, nil
+
+	machineExist := false
+	machineProviderConfig, err := ProviderConfigMachine(a.codec, &machine.Spec)
+	if err != nil {
+		return false, a.handleMachineError(machine, apierrors.InvalidMachineConfiguration("error getting machineProviderConfig from spec: %v", err), createEventAction)
+	}
+
+	hostAddress := machineProviderConfig.Ipmi.HostAddress
+	username := machineProviderConfig.Ipmi.Username
+	password := machineProviderConfig.Ipmi.Password
+
+	c := &goipmi.Connection{
+		Hostname:  hostAddress,
+		Username:  username,
+		Password:  password,
+		Interface: "lanplus",
+	}
+
+	ipmiClient, err := goipmi.NewClient(c)
+
+	if err != nil {
+		glog.Errorf("Error connecting to machine via IPMI: %v", err)
+		return false, err
+	}
+
+	err = ipmiClient.Open()
+
+	if err != nil {
+		glog.Errorf("Error opening connection to machine via IPMI: %v", err)
+		return false, err
+	}
+
+	req := &goipmi.Request{
+		goipmi.NetworkFunctionChassis,
+		goipmi.CommandChassisStatus,
+		&goipmi.ChassisStatusRequest{},
+	}
+
+	resp := &goipmi.ChassisStatusResponse{}
+
+	err = ipmiClient.Send(req, resp)
+
+	if err != nil {
+		glog.Error(err)
+		return false, err
+	}
+
+	if resp.String() == "on" {
+		machineExist = true
+	} else if resp.String() == "off" {
+		machineExist = false
+	}
+
+	defer ipmiClient.Close()
+
+	return machineExist, nil
 }
 
 // updateStatus updates a machine object's status.

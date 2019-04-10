@@ -5,8 +5,6 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/golang/glog"
-
 	"k8s.io/client-go/rest"
 )
 
@@ -25,9 +23,6 @@ type BaremetalServer struct {
 }
 
 func NewBaremetalServer(config rest.Config) *BaremetalServer {
-
-	glog.Warningf("NewBaremetalServer config ServerName: %s", config.ServerName)
-	glog.Warningf("NewBaremetalServer config Host: %s", config.Host)
 
 	domainName := ""
 

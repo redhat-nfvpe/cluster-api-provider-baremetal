@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -83,7 +82,7 @@ func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	introspectionData := BaremetalIntrospectionData{}
 
-	conf, err := sh.server.GetConfigUrl(introspectionData)
+	url, err := sh.server.GetConfigUrl(introspectionData)
 	if err != nil {
 		w.Header().Set("Content-Length", "0")
 		w.WriteHeader(http.StatusInternalServerError)
@@ -91,19 +90,21 @@ func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if conf == nil {
+	if url == "" {
 		w.Header().Set("Content-Length", "0")
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	data, err := json.Marshal(conf)
-	if err != nil {
-		w.Header().Set("Content-Length", "0")
-		w.WriteHeader(http.StatusInternalServerError)
-		glog.Errorf("failed to marshal %v config: %v", data, err)
-		return
-	}
+	// data, err := json.Marshal(conf)
+	// if err != nil {
+	// 	w.Header().Set("Content-Length", "0")
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	glog.Errorf("failed to marshal %v config: %v", data, err)
+	// 	return
+	// }
+
+	data := []byte(url)
 
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(data)))
 	w.Header().Set("Content-Type", "application/json")

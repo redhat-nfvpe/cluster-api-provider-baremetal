@@ -77,9 +77,12 @@ func NewActuator(params ActuatorParams) (*Actuator, error) {
 		eventRecorder: params.EventRecorder,
 	}
 
-	var err error
+	bms, err := server.NewBaremetalServer()
 
-	bms := server.NewBaremetalServer(actuator.config)
+	if err != nil {
+		return nil, err
+	}
+
 	handler := server.NewServerAPIHandler(bms)
 
 	// FIXME: insecure only, for now

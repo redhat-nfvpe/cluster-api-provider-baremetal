@@ -68,7 +68,7 @@ func (a *APIServer) Serve() {
 // ServeHTTP handles the requests for the machine config server
 // API handler.
 func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet && r.Method != http.MethodHead {
+	if r.Method != http.MethodPost && r.Method != http.MethodHead {
 		w.Header().Set("Content-Length", "0")
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -107,7 +107,7 @@ func (sh *APIHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data := []byte(url)
 
 	w.Header().Set("Content-Length", fmt.Sprintf("%d", len(data)))
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "text/plain")
 	if r.Method == http.MethodHead {
 		w.WriteHeader(http.StatusOK)
 		return

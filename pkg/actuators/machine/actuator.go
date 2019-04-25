@@ -109,7 +109,14 @@ const (
 
 // Create creates a machine and is invoked by the Machine Controller
 func (a *Actuator) Create(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
-	glog.Infof("Creating machine %q for cluster %q.", machine.Name, cluster.Name)
+
+	var clusterName string
+	if cluster == nil {
+		clusterName = fmt.Sprintf("%s/%s", machine.Namespace, machine.Labels["machine.openshift.io/cluster-api-cluster"])
+	} else {
+		clusterName = fmt.Sprintf("%s/%s", cluster.ObjectMeta.Namespace, cluster.Name)
+	}
+	glog.Infof("Creating machine %q for cluster %q.", machine.Name, clusterName)
 
 	err := a.CreateMachine(cluster, machine)
 
@@ -225,7 +232,14 @@ func (a *Actuator) handleMachineError(machine *machinev1.Machine, err *apierrors
 
 // Delete : empty method
 func (a *Actuator) Delete(context context.Context, cluster *machinev1.Cluster, machine *machinev1.Machine) error {
-	glog.Infof("Deleting machine %q for cluster %q.", machine.Name, cluster.Name)
+
+	var clusterName string
+	if cluster == nil {
+		clusterName = fmt.Sprintf("%s/%s", machine.Namespace, machine.Labels["machine.openshift.io/cluster-api-cluster"])
+	} else {
+		clusterName = fmt.Sprintf("%s/%s", cluster.ObjectMeta.Namespace, cluster.Name)
+	}
+	glog.Infof("Deleting machine %q for cluster %q.", machine.Name, clusterName)
 
 	err := a.DeleteMachine(cluster, machine)
 
